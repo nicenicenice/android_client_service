@@ -76,14 +76,18 @@ public class DataActivity extends AppCompatActivity {
 
             // picture
             ImageView picture = new ImageView(this);
+            // получили закодированный массив битов в строку
             String imageString = rowValues.getAsString(DbContract.Test.PICTURE);
             byte[] encodedPicture = null;
             try {
+                // декодируем строку в массив битов
                 encodedPicture = imageString.getBytes("ISO-8859-1");
             } catch (Exception e) {}
 
+            // из массива биток делаем bitmap
             Bitmap bitmap = BitmapFactory.decodeByteArray(encodedPicture, 0, encodedPicture.length);
 
+            // из битмапа заполняем наш Image View
             picture.setImageBitmap(Bitmap.createBitmap(bitmap));
 
             row1.addView(num1);

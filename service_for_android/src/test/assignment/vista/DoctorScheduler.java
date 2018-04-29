@@ -7,14 +7,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.*;
-import java.util.Base64;
 
 @WebServlet("/get_data")
 public class DoctorScheduler extends HttpServlet {
@@ -22,6 +19,7 @@ public class DoctorScheduler extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(DoctorScheduler.class);
 
     @Override
+    // функция, выполняющаяся при GET запросе
     protected void doGet(HttpServletRequest request, HttpServletResponse response) {
         try {
             JSONArray jsonArray = getDbDataInJsonArrayFormat();
@@ -58,6 +56,7 @@ public class DoctorScheduler extends HttpServlet {
     /**
      * select all rows in the warehouses table
      */
+    // подключаеся к БД и выбираем данные из нее
     private JSONArray getDbDataInJsonArrayFormat() {
         String sql = "SELECT rowid, num1, num2, num3, num4, picture FROM test";
 
@@ -73,8 +72,11 @@ public class DoctorScheduler extends HttpServlet {
                 jsonRow.accumulate("num2", rs.getDouble("num2"));
                 jsonRow.accumulate("num3", rs.getDouble("num3"));
                 jsonRow.accumulate("num4", rs.getDouble("num4"));
-                //jsonRow.accumulate("picture", rs.getString("picture"));
 
+                // здесь мы считываем картинку в формате BLOB в ByteArrayOutput поток (89 стр)
+                // потом этот поток конвертируем в массив байтов (91 стр)
+                // потом кодируем байтовый массив в строку, используя ISO-8859-1 кодировку.
+                // для того, чтобы на строне android могли декодировать сроку, получить массив байтов, из него Bitmap, а из Bitmap - картинку
                 byte[] bytes = null;
                 ByteArrayOutputStream baos;
                 String decodedBytes = null;
@@ -89,14 +91,9 @@ public class DoctorScheduler extends HttpServlet {
                     bytes = baos.toByteArray();
                     decodedBytes = new String(bytes, "ISO-8859-1");
                 } catch (Exception e) {
-
                     System.out.println(e.getMessage());
                 }
-
                 jsonRow.accumulate("picture", decodedBytes);
-
-                //byte[] bytesEncoded = Base64.getEncoder().encode(pictureAsBytes);
-
 
                 jsonResult.put(jsonRow);
             }
@@ -107,6 +104,7 @@ public class DoctorScheduler extends HttpServlet {
         }
     }
 
+    // отправляем ответ
     private void sendResponse(HttpServletResponse response, JSONArray jsonResult) {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

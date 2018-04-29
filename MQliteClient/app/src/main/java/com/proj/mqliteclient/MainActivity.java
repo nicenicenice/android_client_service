@@ -15,8 +15,9 @@ import org.json.JSONArray;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int REQUEST_CODE_NEW_TAB = 0;
+    // поле для создания нового потока
     private AsyncTask<Void, Void, JSONArray> mDataLoadFromServiceTask;
+    // поле для общения с БД из UI
     private DbProvider mDbProvider;
 
     @Override
