@@ -20,6 +20,7 @@ import com.proj.mqliteclient.db.DbUtils;
 
 import org.json.JSONArray;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class DataActivity extends AppCompatActivity {
@@ -72,18 +73,20 @@ public class DataActivity extends AppCompatActivity {
             num2.setText(rowValues.getAsString(DbContract.Test.NUM2));
 
             // picture
-            //ImageView picture = new ImageView(this);
-            //byte[] encodeByte = rowValues.getAsByteArray(DbContract.Test.PICTURE);
-            //byte[] encodeByte = Base64.decode(encodedString, Base64.DEFAULT);
-            //Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+            ImageView picture = new ImageView(this);
+            String imageString = rowValues.getAsString(DbContract.Test.PICTURE);
+            byte[] encodedPicture = null;
+            try {
+                encodedPicture = imageString.getBytes("ISO-8859-1");
+            } catch (Exception e) {}
 
-            //Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-            //picture.setImageBitmap(Bitmap.createScaledBitmap(bitmap, picture.getWidth(),
-            //        picture.getHeight(), false));
+            Bitmap bitmap = BitmapFactory.decodeByteArray(encodedPicture, 0, encodedPicture.length);
+
+            picture.setImageBitmap(Bitmap.createBitmap(bitmap));
 
             row1.addView(num1);
             row1.addView(num2);
-            //row1.addView(picture);
+            row1.addView(picture);
 
 
             // col 2

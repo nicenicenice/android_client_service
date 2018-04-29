@@ -44,7 +44,7 @@ public class DbUtils {
 
                 int pictureCol = c.getColumnIndex(DbContract.Test.PICTURE);
                 if (!c.isNull(pictureCol)) {
-                    dBValues.put(DbContract.Test.PICTURE, c.getBlob(pictureCol));
+                    dBValues.put(DbContract.Test.PICTURE, c.getString(pictureCol));
                 }
                 resList.add(dBValues);
 

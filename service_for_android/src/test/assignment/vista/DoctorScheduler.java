@@ -9,7 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.*;
 import java.util.Base64;
@@ -71,12 +73,27 @@ public class DoctorScheduler extends HttpServlet {
                 jsonRow.accumulate("num2", rs.getDouble("num2"));
                 jsonRow.accumulate("num3", rs.getDouble("num3"));
                 jsonRow.accumulate("num4", rs.getDouble("num4"));
-                jsonRow.accumulate("picture", rs.getString("picture"));
+                //jsonRow.accumulate("picture", rs.getString("picture"));
 
-                /*Blob pictureBlob = rs.getBlob("picture");
-                int pictureBlobLength = (int) pictureBlob.length();
-                byte[] pictureAsBytes = pictureBlob.getBytes(1, pictureBlobLength);
-                pictureBlob.free();*/
+                byte[] bytes = null;
+                ByteArrayOutputStream baos;
+                String decodedBytes = null;
+                try {
+                    baos = new ByteArrayOutputStream();
+
+                    InputStream input = rs.getBinaryStream("picture");
+                    byte[] buffer = new byte[1024];
+                    while (input.read(buffer) > 0) {
+                        baos.write(buffer);
+                    }
+                    bytes = baos.toByteArray();
+                    decodedBytes = new String(bytes, "ISO-8859-1");
+                } catch (Exception e) {
+
+                    System.out.println(e.getMessage());
+                }
+
+                jsonRow.accumulate("picture", decodedBytes);
 
                 //byte[] bytesEncoded = Base64.getEncoder().encode(pictureAsBytes);
 

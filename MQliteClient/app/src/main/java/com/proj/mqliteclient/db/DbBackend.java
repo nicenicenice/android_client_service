@@ -85,15 +85,6 @@ class DbBackend implements DbContract {
         SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
         String table =  TEST;
 
-        /*String[] columns = new String[] {
-                TEST + "." + Test.ID,
-                TEST + "." + Test.NUM1,
-                TEST + "." + Test.NUM2,
-                TEST + "." + Test.NUM3,
-                TEST + "." + Test.NUM4,
-                TEST + "." + Test.NUM4,
-        };*/
-
         Cursor c = db.query(table, null,
                 null, null, null, null, null);
         if (c != null) {
