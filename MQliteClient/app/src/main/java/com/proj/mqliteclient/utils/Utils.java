@@ -29,6 +29,7 @@ import java.util.List;
 public class Utils {
     private static String SERVICE_URL = "http://10.0.2.2:8080/doctors_schedule/get_data";
 
+    // парсим json из полученного ответа сервиса
     @Nullable
     public static JSONArray getDataInJsonArrayFormat() {
         String rawResponce = getRawDataFromService();
@@ -44,6 +45,7 @@ public class Utils {
         }
     }
 
+    // подключаемся к сервису и получаем данные с него
     private static String getRawDataFromService() {
         BufferedReader inputStream;
         HttpURLConnection connection = null;

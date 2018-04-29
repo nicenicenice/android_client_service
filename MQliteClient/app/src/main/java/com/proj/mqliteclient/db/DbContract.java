@@ -3,6 +3,8 @@ package com.proj.mqliteclient.db;
 /**
  * Created by user on 28/04/2018.
  */
+
+// просто набор констант, которые мы хотим использовать. (таблицы, поля и тп)
 public interface DbContract {
     String DB_NAME = "main.sqlite";
 

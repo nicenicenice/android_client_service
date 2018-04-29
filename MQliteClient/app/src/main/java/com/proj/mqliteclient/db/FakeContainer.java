@@ -7,6 +7,7 @@ import android.content.Context;
  */
 public class FakeContainer {
 
+    // сингтон. предоставляем объект в единичном экземпляре
     private static DbProvider sDbProviderInstance;
     public static DbProvider getProviderInstance(Context context) {
         context = context.getApplicationContext();
@@ -14,14 +15,5 @@ public class FakeContainer {
             sDbProviderInstance = new DbProvider(context);
         }
         return sDbProviderInstance;
-    }
-
-    private static DbNotificationManager sDbNotificationInstance;
-    public static DbNotificationManager getNotificationInstance(Context context) {
-        context = context.getApplicationContext();
-        if (sDbNotificationInstance == null) {
-            sDbNotificationInstance = new DbNotificationManager();
-        }
-        return sDbNotificationInstance;
     }
 }

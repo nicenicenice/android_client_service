@@ -16,10 +16,12 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by user on 28/04/2018.
  */
+
+//  класс, посредством с которым клиентский код(активити) взаимодействует с БД
+    // так же отвечает на многопоточность
 public class DbProvider {
 
     private final DbBackend mDbBackend;
-    private final DbNotificationManager mDbNotificationManager;
     private final CustomExecutor mExecutor;
     private final Handler mHandler = new Handler(Looper.getMainLooper());
 
@@ -27,21 +29,15 @@ public class DbProvider {
         void onFinished(T result);
     }
 
+    // конструктор
     DbProvider(Context context) {
         mDbBackend = new DbBackend(context);
-        mDbNotificationManager = FakeContainer.getNotificationInstance(context);
         mExecutor = new CustomExecutor();
     }
 
-    @VisibleForTesting
-    DbProvider(DbBackend dbBackend,
-               DbNotificationManager dbNotificationManager,
-               CustomExecutor executor) {
-        mDbBackend = dbBackend;
-        mDbNotificationManager = dbNotificationManager;
-        mExecutor = executor;
-    }
-
+    // в новом потоке готовим запрос
+    // потом запускаем в основном потоке onFinished() переданной функции-коллбека
+    // у нас это onDataLoadedFromDb(), которая делаем выборку из БД и вставляет данные в UI
     public void getDataFromDb(final ResultCallback<Cursor> callback) {
         mExecutor.execute(new Runnable() {
             @Override
@@ -57,12 +53,12 @@ public class DbProvider {
         });
     }
 
+    // в новом потоке очищаем и заполняем таблицу
     public void refreshDbData(final JSONArray response) {
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 mDbBackend.refreshTestTableWithJsonData(response);
-                mDbNotificationManager.notifyListeners();
             }
         });
     }

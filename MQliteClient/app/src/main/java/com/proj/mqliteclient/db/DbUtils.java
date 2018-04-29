@@ -9,13 +9,19 @@ import java.util.List;
 /**
  * Created by user on 28/04/2018.
  */
+
+// класс-помощьник для работы с БД
 public class DbUtils {
+
+    // получаем данные из БД и закрываем курсор
     public static List<ContentValues> getResultStringListAndClose(Cursor c) {
         final List<ContentValues> resultStringList = getAllDataFromDB(c);
         closeCursor(c);
         return resultStringList;
     }
 
+    // с помощью курсора вынимаем данные из таблицы в наш список
+    // фактически, здесь происхоит выполнение запроса
     private static List<ContentValues> getAllDataFromDB(Cursor c) {
         List<ContentValues> resList = new ArrayList<>();
         if (c != null && (c.isFirst() || c.moveToFirst())) {
@@ -57,6 +63,7 @@ public class DbUtils {
 
     }
 
+    // закрываем курсор
     public static void closeCursor(Cursor c) {
         if (c != null && !c.isClosed()) {
             c.close();

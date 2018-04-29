@@ -15,6 +15,8 @@ import org.json.JSONObject;
 /**
  * Created by user on 28/04/2018.
  */
+
+// главный класс для работы с БД
 class DbBackend implements DbContract {
 
     private final DbOpenHelper mDbOpenHelper;
@@ -28,17 +30,19 @@ class DbBackend implements DbContract {
         mDbOpenHelper = dbOpenHelper;
     }
 
+    // очищаем таблицу и заполняем новыми данными из полученного json array
     public void refreshTestTableWithJsonData(JSONArray response) {
         trunkateTestTable();
         insertJsonArrayIntoTable(response);
     }
 
-    // delete all records from the table
+    // удаляем все данные
     private void trunkateTestTable() {
         SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
         db.delete(TEST, null, null);
     }
 
+    // вставляем данные из json array в таблицу
     private void insertJsonArrayIntoTable(JSONArray response) {
         if (response == null || response.length() <= 0) {
             return;
@@ -57,7 +61,6 @@ class DbBackend implements DbContract {
                 Double num3 = jsonRow.getDouble("num3");
                 Double num4 = jsonRow.getDouble("num4");
                 String picture = jsonRow.getString("picture");
-                //String picture = jsonRow.getString("picture");
 
                 ContentValues values = new ContentValues();
 
@@ -66,8 +69,6 @@ class DbBackend implements DbContract {
                 values.put(Test.NUM3, num3);
                 values.put(Test.NUM4, num4);
                 values.put(Test.PICTURE, picture);
-                System.out.println(values.toString());
-                //values.put(Test.PICTURE, picture);
 
                 db.insert(TEST, null, values);
             }
@@ -81,6 +82,7 @@ class DbBackend implements DbContract {
         db.close();
     }
 
+    // готовим запрос на выборку всез полей таблицы, (select * from test;)
     public Cursor getAllDataFromTestTable() {
         SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
         String table =  TEST;

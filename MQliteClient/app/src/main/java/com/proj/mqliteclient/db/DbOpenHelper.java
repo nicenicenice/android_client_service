@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by user on 28/04/2018
  */
+
+// класс отвечает за создание и обновление БД
 class DbOpenHelper extends SQLiteOpenHelper implements DbContract {
 
     private static final int DB_VERSION = 1;
@@ -15,6 +17,7 @@ class DbOpenHelper extends SQLiteOpenHelper implements DbContract {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
+    // создание
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + TEST + "(" +
@@ -29,10 +32,9 @@ class DbOpenHelper extends SQLiteOpenHelper implements DbContract {
 
     }
 
+    // обновление
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Updating for dev versions!
-
         db.execSQL("DROP TABLE " + TEST);
         onCreate(db);
     }
