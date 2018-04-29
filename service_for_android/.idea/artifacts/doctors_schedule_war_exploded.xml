@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="doctors_schedule:war exploded">
+    <output-path>$PROJECT_DIR$/../doctors_schedule/target/doctors_schedule</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="doctors schedule" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:3.1.0" />
+          <element id="library" level="project" name="Maven: log4j:log4j:1.2.17" />
+          <element id="library" level="project" name="Maven: org.ini4j:ini4j:0.5.4" />
+          <element id="library" level="project" name="Maven: org.json:json:20160212" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.6" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-log4j12:1.7.6" />
+          <element id="library" level="project" name="Maven: org.xerial:sqlite-jdbc:3.21.0.1" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="doctors schedule/web/Web" />
+      <element id="directory" name="META-INF" />
+    </root>
+  </artifact>
+</component>

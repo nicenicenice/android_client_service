@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MQliteClient</string>
+    <string name="refr_button">REFRESH</string>
+    <string name="show_button">DATA</string>
+</resources>
