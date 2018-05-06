@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 // класс отвечает за создание и обновление БД
 class DbOpenHelper extends SQLiteOpenHelper implements DbContract {
 
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2;
 
     public DbOpenHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -20,13 +20,14 @@ class DbOpenHelper extends SQLiteOpenHelper implements DbContract {
     // создание
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE " + TEST + "(" +
-                Test.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                Test.NUM1 + " REAL, " +
-                Test.NUM2 + " REAL, " +
-                Test.NUM3 + " REAL, " +
-                Test.NUM4 + " REAL, " +
-                Test.PICTURE + " BLOB" +
+        db.execSQL("CREATE TABLE " + GR_OVERLAYS + "(" +
+                GroundOverlays.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                GroundOverlays.NAME + " TEXT, " +
+                GroundOverlays.LAT_LNG_BOUND_NEN + " REAL, " +
+                GroundOverlays.LAT_LNG_BOUND_NEE + " REAL, " +
+                GroundOverlays.LAT_LNG_BOUND_SWN + " REAL, " +
+                GroundOverlays.LAT_LNG_BOUND_SWE + " REAL, " +
+                GroundOverlays.OVERLAY_PIC + " BLOB" +
                 ")"
         );
 
@@ -35,7 +36,7 @@ class DbOpenHelper extends SQLiteOpenHelper implements DbContract {
     // обновление
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE " + TEST);
+        db.execSQL("DROP TABLE " + GR_OVERLAYS);
         onCreate(db);
     }
 }

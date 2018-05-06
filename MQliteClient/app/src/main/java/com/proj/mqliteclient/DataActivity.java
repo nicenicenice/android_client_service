@@ -63,38 +63,42 @@ public class DataActivity extends AppCompatActivity {
         for (int i = 0; i < resList.size(); ++i) {
             ContentValues rowValues = resList.get(i);
 
+            //SELECT rowid, name, latLngBoundNEN, latLngBoundNEE, latLngBoundSWN, latLngBoundSWE, overlayPic FROM gr_overlays;
+
             TableRow outerRow = new TableRow(this);
             TableLayout innerTl = new TableLayout(this);
 
             // col 1
             TableRow row1 = new TableRow(this);
-            TextView num1 = new TextView(this);
-            num1.setText(rowValues.getAsString(DbContract.Test.NUM1));
+            TextView latLngBoundNEN = new TextView(this);
+            latLngBoundNEN.setText(rowValues.getAsString(DbContract.GroundOverlays.LAT_LNG_BOUND_NEN));
 
-            TextView num2 = new TextView(this);
-            num2.setText(rowValues.getAsString(DbContract.Test.NUM2));
+            TextView latLngBoundNEE = new TextView(this);
+            latLngBoundNEE.setText(rowValues.getAsString(DbContract.GroundOverlays.LAT_LNG_BOUND_NEE));
 
             // picture
             ImageView picture = new ImageView(this);
             // получили закодированный массив битов в строку
-            String imageString = rowValues.getAsString(DbContract.Test.PICTURE);
+            String imageString = rowValues.getAsString(DbContract.GroundOverlays.OVERLAY_PIC);
             byte[] encodedPicture = null;
             try {
                 // декодируем строку в массив битов
                 encodedPicture = imageString.getBytes("ISO-8859-1");
             } catch (Exception e) {}
 
-            // из массива биток делаем bitmap
+            // из массива битов делаем bitmap
             Bitmap bitmap = BitmapFactory.decodeByteArray(encodedPicture, 0, encodedPicture.length);
 
             // из битмапа заполняем наш Image View
             picture.setImageBitmap(Bitmap.createBitmap(bitmap));
 
-            row1.addView(num1);
-            row1.addView(num2);
+            row1.addView(latLngBoundNEN);
+            row1.addView(latLngBoundNEE);
             row1.addView(picture);
+            innerTl.addView(row1);
 
 
+            /*
             // col 2
             TableRow row2 = new TableRow(this);
             TextView num3 = new TextView(this);
@@ -106,8 +110,9 @@ public class DataActivity extends AppCompatActivity {
             row2.addView(num3);
             row2.addView(num4);
 
-            innerTl.addView(row1);
             innerTl.addView(row2);
+            */
+
             outerRow.addView(innerTl);
             ll.addView(outerRow);
         }

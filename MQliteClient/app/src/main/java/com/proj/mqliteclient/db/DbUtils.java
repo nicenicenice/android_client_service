@@ -28,29 +28,36 @@ public class DbUtils {
             do {
                 ContentValues dBValues = new ContentValues();
 
-                int num1 = c.getColumnIndex(DbContract.Test.NUM1);
-                if (!c.isNull(num1)) {
-                    dBValues.put(DbContract.Test.NUM1, c.getDouble(num1));
+                //SELECT rowid, name, latLngBoundNEN, latLngBoundNEE, latLngBoundSWN, latLngBoundSWE, overlayPic FROM gr_overlays;
+
+                int name = c.getColumnIndex(DbContract.GroundOverlays.NAME);
+                if (!c.isNull(name)) {
+                    dBValues.put(DbContract.GroundOverlays.NAME, c.getString(name));
                 }
 
-                int num2 = c.getColumnIndex(DbContract.Test.NUM2);
-                if (!c.isNull(num2)) {
-                    dBValues.put(DbContract.Test.NUM2, c.getDouble(num2));
+                int latLngBoundNEN = c.getColumnIndex(DbContract.GroundOverlays.LAT_LNG_BOUND_NEN);
+                if (!c.isNull(latLngBoundNEN)) {
+                    dBValues.put(DbContract.GroundOverlays.LAT_LNG_BOUND_NEN, c.getDouble(latLngBoundNEN));
                 }
 
-                int num3 = c.getColumnIndex(DbContract.Test.NUM3);
-                if (!c.isNull(num3)) {
-                    dBValues.put(DbContract.Test.NUM3, c.getDouble(num3));
+                int latLngBoundNEE = c.getColumnIndex(DbContract.GroundOverlays.LAT_LNG_BOUND_NEE);
+                if (!c.isNull(latLngBoundNEE)) {
+                    dBValues.put(DbContract.GroundOverlays.LAT_LNG_BOUND_NEE, c.getDouble(latLngBoundNEE));
                 }
 
-                int num4 = c.getColumnIndex(DbContract.Test.NUM4);
-                if (!c.isNull(num4)) {
-                    dBValues.put(DbContract.Test.NUM4, c.getDouble(num4));
+                int latLngBoundSWN = c.getColumnIndex(DbContract.GroundOverlays.LAT_LNG_BOUND_SWN);
+                if (!c.isNull(latLngBoundSWN)) {
+                    dBValues.put(DbContract.GroundOverlays.LAT_LNG_BOUND_SWN, c.getDouble(latLngBoundSWN));
                 }
 
-                int pictureCol = c.getColumnIndex(DbContract.Test.PICTURE);
-                if (!c.isNull(pictureCol)) {
-                    dBValues.put(DbContract.Test.PICTURE, c.getString(pictureCol));
+                int latLngBoundSWE = c.getColumnIndex(DbContract.GroundOverlays.LAT_LNG_BOUND_SWE);
+                if (!c.isNull(latLngBoundSWE)) {
+                    dBValues.put(DbContract.GroundOverlays.LAT_LNG_BOUND_SWE, c.getDouble(latLngBoundSWE));
+                }
+
+                int overlayPic = c.getColumnIndex(DbContract.GroundOverlays.OVERLAY_PIC);
+                if (!c.isNull(overlayPic)) {
+                    dBValues.put(DbContract.GroundOverlays.OVERLAY_PIC, c.getString(overlayPic));
                 }
                 resList.add(dBValues);
 

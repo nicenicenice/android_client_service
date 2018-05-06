@@ -7,14 +7,14 @@ package com.proj.mqliteclient.db;
 // просто набор констант, которые мы хотим использовать. (таблицы, поля и тп)
 public interface DbContract {
     String DB_NAME = "main.sqlite";
-
-    String TEST = "test";
-    interface Test {
+    String GR_OVERLAYS = "gr_overlays";
+    interface GroundOverlays {
         String ID = "rowid";
-        String NUM1 = "num1";
-        String NUM2 = "num2";
-        String NUM3 = "num3";
-        String NUM4 = "num4";
-        String PICTURE = "picture";
+        String NAME = "name";
+        String LAT_LNG_BOUND_NEN = "latLngBoundNEN";
+        String LAT_LNG_BOUND_NEE = "latLngBoundNEE";
+        String LAT_LNG_BOUND_SWN = "latLngBoundSWN";
+        String LAT_LNG_BOUND_SWE = "latLngBoundSWE";
+        String OVERLAY_PIC = "overlay_pic";
     }
 }

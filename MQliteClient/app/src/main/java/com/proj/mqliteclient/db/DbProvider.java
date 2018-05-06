@@ -42,7 +42,7 @@ public class DbProvider {
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                final Cursor c =  mDbBackend.getAllDataFromTestTable();
+                final Cursor c =  mDbBackend.getAllDataFromTable();
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -58,7 +58,7 @@ public class DbProvider {
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                mDbBackend.refreshTestTableWithJsonData(response);
+                mDbBackend.refreshTableWithJsonData(response);
             }
         });
     }

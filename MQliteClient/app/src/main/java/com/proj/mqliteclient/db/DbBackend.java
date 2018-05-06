@@ -31,15 +31,15 @@ class DbBackend implements DbContract {
     }
 
     // очищаем таблицу и заполняем новыми данными из полученного json array
-    public void refreshTestTableWithJsonData(JSONArray response) {
-        trunkateTestTable();
+    public void refreshTableWithJsonData(JSONArray response) {
+        trunkateTable();
         insertJsonArrayIntoTable(response);
     }
 
     // удаляем все данные
-    private void trunkateTestTable() {
+    private void trunkateTable() {
         SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
-        db.delete(TEST, null, null);
+        db.delete(GR_OVERLAYS, null, null);
     }
 
     // вставляем данные из json array в таблицу
@@ -56,21 +56,23 @@ class DbBackend implements DbContract {
             for (int i = 0; i < response.length(); i++) {
                 JSONObject jsonRow = response.getJSONObject(i);
 
-                Double num1 = jsonRow.getDouble("num1");
-                Double num2 = jsonRow.getDouble("num2");
-                Double num3 = jsonRow.getDouble("num3");
-                Double num4 = jsonRow.getDouble("num4");
-                String picture = jsonRow.getString("picture");
+                String name = jsonRow.getString("name");
+                Double latLngBoundNEN = jsonRow.getDouble("latLngBoundNEN");
+                Double latLngBoundNEE = jsonRow.getDouble("latLngBoundNEE");
+                Double latLngBoundSWN = jsonRow.getDouble("latLngBoundSWN");
+                Double latLngBoundSWE = jsonRow.getDouble("latLngBoundSWE");
+                String overlay_pic = jsonRow.getString("overlay_pic");
 
                 ContentValues values = new ContentValues();
 
-                values.put(Test.NUM1, num1);
-                values.put(Test.NUM2, num2);
-                values.put(Test.NUM3, num3);
-                values.put(Test.NUM4, num4);
-                values.put(Test.PICTURE, picture);
+                values.put(GroundOverlays.NAME, name);
+                values.put(GroundOverlays.LAT_LNG_BOUND_NEE, latLngBoundNEN);
+                values.put(GroundOverlays.LAT_LNG_BOUND_NEE, latLngBoundNEE);
+                values.put(GroundOverlays.LAT_LNG_BOUND_SWN, latLngBoundSWN);
+                values.put(GroundOverlays.LAT_LNG_BOUND_SWE, latLngBoundSWE);
+                values.put(GroundOverlays.OVERLAY_PIC, overlay_pic);
 
-                db.insert(TEST, null, values);
+                db.insert(GR_OVERLAYS, null, values);
             }
 
             db.setTransactionSuccessful();
@@ -83,9 +85,9 @@ class DbBackend implements DbContract {
     }
 
     // готовим запрос на выборку всез полей таблицы, (select * from test;)
-    public Cursor getAllDataFromTestTable() {
+    public Cursor getAllDataFromTable() {
         SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
-        String table =  TEST;
+        String table =  GR_OVERLAYS;
 
         Cursor c = db.query(table, null,
                 null, null, null, null, null);
