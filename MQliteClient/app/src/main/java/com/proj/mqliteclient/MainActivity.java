@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     // показывает новую активити
     private void showDataActivity() {
-        startActivity(new Intent(this, DataActivity.class));
+        startActivity(new Intent(this, MapsActivity.class));
     }
 
     // скачиваем данные с сервиса в другом потоке и обновляем таблицу, полученными данными

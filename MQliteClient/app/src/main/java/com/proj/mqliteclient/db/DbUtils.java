@@ -28,8 +28,6 @@ public class DbUtils {
             do {
                 ContentValues dBValues = new ContentValues();
 
-                //SELECT rowid, name, latLngBoundNEN, latLngBoundNEE, latLngBoundSWN, latLngBoundSWE, overlayPic FROM gr_overlays;
-
                 int name = c.getColumnIndex(DbContract.GroundOverlays.NAME);
                 if (!c.isNull(name)) {
                     dBValues.put(DbContract.GroundOverlays.NAME, c.getString(name));
