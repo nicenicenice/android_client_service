@@ -61,7 +61,7 @@ class DbBackend implements DbContract {
                 Double latLngBoundNEE = jsonRow.getDouble("latLngBoundNEE");
                 Double latLngBoundSWN = jsonRow.getDouble("latLngBoundSWN");
                 Double latLngBoundSWE = jsonRow.getDouble("latLngBoundSWE");
-                String overlay_pic = jsonRow.getString("overlay_pic");
+                String overlayPic = jsonRow.getString("overlayPic");
 
                 ContentValues values = new ContentValues();
 
@@ -70,7 +70,7 @@ class DbBackend implements DbContract {
                 values.put(GroundOverlays.LAT_LNG_BOUND_NEE, latLngBoundNEE);
                 values.put(GroundOverlays.LAT_LNG_BOUND_SWN, latLngBoundSWN);
                 values.put(GroundOverlays.LAT_LNG_BOUND_SWE, latLngBoundSWE);
-                values.put(GroundOverlays.OVERLAY_PIC, overlay_pic);
+                values.put(GroundOverlays.OVERLAY_PIC, overlayPic);
 
                 db.insert(GR_OVERLAYS, null, values);
             }

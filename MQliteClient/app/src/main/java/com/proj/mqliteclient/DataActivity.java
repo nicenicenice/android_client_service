@@ -63,8 +63,6 @@ public class DataActivity extends AppCompatActivity {
         for (int i = 0; i < resList.size(); ++i) {
             ContentValues rowValues = resList.get(i);
 
-            //SELECT rowid, name, latLngBoundNEN, latLngBoundNEE, latLngBoundSWN, latLngBoundSWE, overlayPic FROM gr_overlays;
-
             TableRow outerRow = new TableRow(this);
             TableLayout innerTl = new TableLayout(this);
 
@@ -77,7 +75,7 @@ public class DataActivity extends AppCompatActivity {
             latLngBoundNEE.setText(rowValues.getAsString(DbContract.GroundOverlays.LAT_LNG_BOUND_NEE));
 
             // picture
-            ImageView picture = new ImageView(this);
+            ImageView overlayPic = new ImageView(this);
             // получили закодированный массив битов в строку
             String imageString = rowValues.getAsString(DbContract.GroundOverlays.OVERLAY_PIC);
             byte[] encodedPicture = null;
@@ -90,11 +88,11 @@ public class DataActivity extends AppCompatActivity {
             Bitmap bitmap = BitmapFactory.decodeByteArray(encodedPicture, 0, encodedPicture.length);
 
             // из битмапа заполняем наш Image View
-            picture.setImageBitmap(Bitmap.createBitmap(bitmap));
+            overlayPic.setImageBitmap(Bitmap.createBitmap(bitmap));
 
             row1.addView(latLngBoundNEN);
             row1.addView(latLngBoundNEE);
-            row1.addView(picture);
+            row1.addView(overlayPic);
             innerTl.addView(row1);
 
 

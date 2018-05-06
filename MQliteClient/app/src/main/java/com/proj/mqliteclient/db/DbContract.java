@@ -15,6 +15,6 @@ public interface DbContract {
         String LAT_LNG_BOUND_NEE = "latLngBoundNEE";
         String LAT_LNG_BOUND_SWN = "latLngBoundSWN";
         String LAT_LNG_BOUND_SWE = "latLngBoundSWE";
-        String OVERLAY_PIC = "overlay_pic";
+        String OVERLAY_PIC = "overlayPic";
     }
 }
