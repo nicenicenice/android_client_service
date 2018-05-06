@@ -1,15 +1,15 @@
-sqlite3 test.db
+sqlite3 gr_overlays.db
 
-SELECT * FROM test;
-SELECT rowid, num1, num2, num3, num4, picture FROM test;
-DROP TABLE test;
-CREATE TABLE test (rowid INTEGER PRIMARY KEY AUTOINCREMENT, num1 REAL, num2 REAL, num3 REAL, num4 REAL, picture BLOB);
-INSERT INTO test (num1, num2, num3, num4, picture) VALUES(1.1, 1.2, 1.3, 1.4, readfile('download.png'));
-INSERT INTO test (num1, num2, num3, num4, picture) VALUES(2.1, 2.2, 2.2, 2.4, readfile('download.png'));
-INSERT INTO test (num1, num2, num3, num4, picture) VALUES(3.1, 3.2, 3.3, 3.4, readfile('download.png'));
+SELECT * FROM gr_overlays;
+SELECT rowid, name, latLngBoundNEN, latLngBoundNEE, latLngBoundSWN, latLngBoundSWE, overlayPic FROM gr_overlays;
+DROP TABLE gr_overlays;
 
-ATTACH DATABASE 'test.db' as 'TEST';
+CREATE TABLE gr_overlays (rowid INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, latLngBoundNEN REAL, latLngBoundNEE REAL, latLngBoundSWN REAL, latLngBoundSWE REAL, overlayPic BLOB);
+INSERT INTO gr_overlays (name, latLngBoundNEN, latLngBoundNEE, latLngBoundSWN, latLngBoundSWE, overlayPic) VALUES('наземное наложение 1', 40.712216, -74.22655, 40.773941, -74.12544, readfile('newark_nj_1922.jpg'));
+INSERT INTO gr_overlays (name, latLngBoundNEN, latLngBoundNEE, latLngBoundSWN, latLngBoundSWE, overlayPic) VALUES('наземное наложение 2', 40.712216, -74.22655, 40.773941, -74.12544, readfile('newark_nj_1922.jpg'));
+INSERT INTO gr_overlays (name, latLngBoundNEN, latLngBoundNEE, latLngBoundSWN, latLngBoundSWE, overlayPic) VALUES('наземное наложение 3', 40.712216, -74.22655, 40.773941, -74.12544, readfile('newark_nj_1922.jpg'));
 
+ATTACH DATABASE 'gr_overlays.db' as 'OVERLAYS';
 
 readfile/
 https://www.sqlite.org/cli.html
