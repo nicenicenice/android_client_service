@@ -37,7 +37,7 @@ public class DoctorScheduler extends HttpServlet {
      */
     private Connection connect() {
         // SQLite connection string
-        String url = "jdbc:sqlite:/Users/user/test.db";
+        String url = "jdbc:sqlite:/Users/user/gr_overlays.db";
         Connection conn = null;
         try {
             try {
@@ -58,7 +58,7 @@ public class DoctorScheduler extends HttpServlet {
      */
     // подключаеся к БД и выбираем данные из нее
     private JSONArray getDbDataInJsonArrayFormat() {
-        String sql = "SELECT rowid, num1, num2, num3, num4, picture FROM test";
+        String sql = "SELECT * FROM gr_overlays";
 
         try (Connection conn = this.connect();
              Statement stmt = conn.createStatement();
@@ -68,10 +68,12 @@ public class DoctorScheduler extends HttpServlet {
 
             while (rs.next()) {
                 JSONObject jsonRow = new JSONObject();
-                jsonRow.accumulate("num1", rs.getDouble("num1"));
-                jsonRow.accumulate("num2", rs.getDouble("num2"));
-                jsonRow.accumulate("num3", rs.getDouble("num3"));
-                jsonRow.accumulate("num4", rs.getDouble("num4"));
+
+                jsonRow.accumulate("name", rs.getString("name"));
+                jsonRow.accumulate("latLngBoundNEN", rs.getDouble("latLngBoundNEN"));
+                jsonRow.accumulate("latLngBoundNEE", rs.getDouble("latLngBoundNEE"));
+                jsonRow.accumulate("latLngBoundSWN", rs.getDouble("latLngBoundSWN"));
+                jsonRow.accumulate("latLngBoundSWE", rs.getDouble("latLngBoundSWE"));
 
                 // здесь мы считываем картинку в формате BLOB в ByteArrayOutput поток (89 стр)
                 // потом этот поток конвертируем в массив байтов (91 стр)
@@ -83,7 +85,7 @@ public class DoctorScheduler extends HttpServlet {
                 try {
                     baos = new ByteArrayOutputStream();
 
-                    InputStream input = rs.getBinaryStream("picture");
+                    InputStream input = rs.getBinaryStream("overlayPic");
                     byte[] buffer = new byte[1024];
                     while (input.read(buffer) > 0) {
                         baos.write(buffer);
@@ -93,7 +95,7 @@ public class DoctorScheduler extends HttpServlet {
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
-                jsonRow.accumulate("picture", decodedBytes);
+                jsonRow.accumulate("overlayPic", decodedBytes);
 
                 jsonResult.put(jsonRow);
             }

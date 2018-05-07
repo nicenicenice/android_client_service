@@ -20,6 +20,12 @@ public class DbUtils {
         return resultStringList;
     }
 
+    public static List<String> getStringListWithNamesAndClose(Cursor c) {
+        final List<String> resultStringList = getNamesFromDB(c);
+        closeCursor(c);
+        return resultStringList;
+    }
+
     // с помощью курсора вынимаем данные из таблицы в наш список
     // фактически, здесь происхоит выполнение запроса
     private static List<ContentValues> getAllDataFromDB(Cursor c) {
@@ -60,6 +66,25 @@ public class DbUtils {
                 resList.add(dBValues);
 
                 System.out.println(dBValues.toString());
+            }
+            while (c.moveToNext());
+        }
+
+        return resList;
+
+    }
+
+    private static List<String> getNamesFromDB(Cursor c) {
+        List<String> resList = new ArrayList<>();
+        if (c != null && (c.isFirst() || c.moveToFirst())) {
+            do {
+                String overlayName = null;
+
+                int nameIdx = c.getColumnIndex(DbContract.GroundOverlays.NAME);
+                if (!c.isNull(nameIdx)) {
+                    overlayName = c.getString(nameIdx);
+                }
+                resList.add(overlayName);
             }
             while (c.moveToNext());
         }

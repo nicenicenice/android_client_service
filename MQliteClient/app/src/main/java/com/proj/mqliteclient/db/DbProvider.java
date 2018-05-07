@@ -9,6 +9,7 @@ import android.support.annotation.VisibleForTesting;
 
 import org.json.JSONArray;
 
+import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -43,6 +44,21 @@ public class DbProvider {
             @Override
             public void run() {
                 final Cursor c =  mDbBackend.getAllDataFromTable();
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onFinished(c);
+                    }
+                });
+            }
+        });
+    }
+
+    public void getOverlayNamesFromDb(final ResultCallback<Cursor> callback) {
+        mExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                final Cursor c =  mDbBackend.getNamesFromTable();
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {

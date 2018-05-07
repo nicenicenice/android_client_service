@@ -1,31 +1,64 @@
 package com.proj.mqliteclient;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.proj.mqliteclient.db.DbProvider;
+import com.proj.mqliteclient.db.DbUtils;
 import com.proj.mqliteclient.db.FakeContainer;
 import com.proj.mqliteclient.utils.Utils;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     // поле для создания нового потока
     private AsyncTask<Void, Void, JSONArray> mDataLoadFromServiceTask;
-    // поле для общения с БД из UI
-    private DbProvider mDbProvider;
 
+    private DbProvider mDbProvider;
+    private DbProvider.ResultCallback<Cursor> mDataLoadDbCallback;
+
+    private void loadOverlayNamesFromDb() {
+
+        mDataLoadDbCallback = new DbProvider.ResultCallback<Cursor>() {
+            @Override
+            public void onFinished(Cursor c) {
+                if (mDataLoadDbCallback != this) {
+                    return;
+                }
+                onDataLoadedFromDb(c);
+            }
+        };
+        mDbProvider.getOverlayNamesFromDb(mDataLoadDbCallback);
+    }
+
+    private void onDataLoadedFromDb(Cursor c) {
+        List<String> resList = DbUtils.getStringListWithNamesAndClose(c);
+        setSpinnersAdapter(resList);
+    }
+
+    ///
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDbProvider = FakeContainer.getProviderInstance(this);
+
         setContentView(R.layout.activity_main);
 
+        // обработка кнопки REFRESH
         Button refreshButton = (Button) findViewById(R.id.refr_button);
         assert refreshButton != null;
         refreshButton.setOnClickListener(new View.OnClickListener() {
@@ -34,9 +67,12 @@ public class MainActivity extends AppCompatActivity {
                 // подключаемся в сервису, скачиваем json array и
                     // обновляем свою таблицу БД в другом потоке
                 loadDataFromService();
+                Toast.makeText(getBaseContext(),
+                        "Данные успешно загружены", Toast.LENGTH_LONG).show();
             }
         });
 
+        // обработка кнопки DATA
         Button showButton = (Button) findViewById(R.id.show_button);
         assert showButton != null;
         showButton.setOnClickListener(new View.OnClickListener() {
@@ -45,11 +81,43 @@ public class MainActivity extends AppCompatActivity {
                 showDataActivity();
             }
         });
+
+        // обработка Spinner
+        loadOverlayNamesFromDb();
+
+
+
+
+
+        /*spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent,
+                                       View itemSelected, int selectedItemPosition, long selectedId) {
+
+                //String[] choose = getResources().getStringArray(R.array.animals);
+                //Toast toast = Toast.makeText(getApplicationContext(),
+                //        "Ваш выбор: " + choose[selectedItemPosition], Toast.LENGTH_SHORT);
+                //toast.show();
+            }
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });*/
     }
 
     // показывает новую активити
     private void showDataActivity() {
-        startActivity(new Intent(this, MapsActivity.class));
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        assert spinner != null;
+
+        String selectedItem = spinner.getSelectedItem().toString();
+        if (selectedItem == null) {
+            Toast.makeText(getBaseContext(),
+                    "произошла непредвиденная ошибка", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        Intent intent = new Intent(this, MapsActivity.class);
+        intent.putExtra("name", selectedItem);
+        startActivity(intent);
     }
 
     // скачиваем данные с сервиса в другом потоке и обновляем таблицу, полученными данными
@@ -67,5 +135,20 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         mDataLoadFromServiceTask.execute();
+    }
+
+
+    private void setSpinnersAdapter(List<String> spinnerDataList) {
+        if (spinnerDataList == null) {
+            spinnerDataList =  new ArrayList<String>();
+            spinnerDataList.add("there're no any overlays");
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, spinnerDataList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        assert spinner != null;
+        spinner.setAdapter(adapter);
     }
 }

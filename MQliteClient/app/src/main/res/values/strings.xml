@@ -3,4 +3,7 @@
     <string name="refr_button">REFRESH</string>
     <string name="show_button">DATA</string>
     <string name="title_activity_maps">Map</string>
+    <string-array name="overlays_array">
+        <item>there are no any overlays</item>
+    </string-array>
 </resources>

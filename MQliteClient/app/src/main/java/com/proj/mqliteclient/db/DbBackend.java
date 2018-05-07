@@ -66,7 +66,7 @@ class DbBackend implements DbContract {
                 ContentValues values = new ContentValues();
 
                 values.put(GroundOverlays.NAME, name);
-                values.put(GroundOverlays.LAT_LNG_BOUND_NEE, latLngBoundNEN);
+                values.put(GroundOverlays.LAT_LNG_BOUND_NEN, latLngBoundNEN);
                 values.put(GroundOverlays.LAT_LNG_BOUND_NEE, latLngBoundNEE);
                 values.put(GroundOverlays.LAT_LNG_BOUND_SWN, latLngBoundSWN);
                 values.put(GroundOverlays.LAT_LNG_BOUND_SWE, latLngBoundSWE);
@@ -90,6 +90,19 @@ class DbBackend implements DbContract {
         String table =  GR_OVERLAYS;
 
         Cursor c = db.query(table, null,
+                null, null, null, null, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+    public Cursor getNamesFromTable() {
+        SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
+        String table =  GR_OVERLAYS;
+        String[] columns = new String[] {GR_OVERLAYS + "." + GroundOverlays.NAME};
+
+        Cursor c = db.query(table, columns,
                 null, null, null, null, null);
         if (c != null) {
             c.moveToFirst();

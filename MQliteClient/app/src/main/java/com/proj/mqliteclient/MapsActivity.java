@@ -1,7 +1,16 @@
 package com.proj.mqliteclient;
 
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,14 +22,25 @@ import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.proj.mqliteclient.db.DbContract;
+import com.proj.mqliteclient.db.DbProvider;
+import com.proj.mqliteclient.db.DbUtils;
+import com.proj.mqliteclient.db.FakeContainer;
+
+import java.util.List;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private DbProvider.ResultCallback<Cursor> mDataLoadDbCallback;
+    private DbProvider mDbProvider;
+    String nameOfOverlay = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDbProvider = FakeContainer.getProviderInstance(this);
+
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -28,38 +48,73 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
+    private void loadDataFromDb(final GoogleMap googleMap) {
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
+        mDataLoadDbCallback = new DbProvider.ResultCallback<Cursor>() {
+            @Override
+            public void onFinished(Cursor result) {
+                if (mDataLoadDbCallback != this) {
+                    return;
+                }
+                onDataLoadedFromDb(googleMap, result);
+            }
+        };
+        mDbProvider.getDataFromDb(mDataLoadDbCallback);
+    }
+
+    private void onDataLoadedFromDb(GoogleMap googleMap, Cursor c) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("name");
 
-        LatLngBounds newarkBounds = new LatLngBounds(
-                new LatLng(40.712216, -74.22655),       // South west corner
-                new LatLng(40.773941, -74.12544));      // North east corner
-        GroundOverlayOptions newarkMap = new GroundOverlayOptions()
-                .image(BitmapDescriptorFactory.fromResource(R.drawable.))
-                .positionFromBounds(newarkBounds);
+        List<ContentValues> resList = DbUtils.getResultStringListAndClose(c);
 
-        // Add an overlay to the map, retaining a handle to the GroundOverlay object.
-        //GroundOverlay imageOverlay = mMap.addGroundOverlay(newarkMap);
-        try {
-            GroundOverlay imageOverlay = mMap.addGroundOverlay(newarkMap);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        for (int i = 0; i < resList.size(); ++i) {
+            ContentValues rowValues = resList.get(i);
+
+            if (rowValues.getAsString(DbContract.GroundOverlays.NAME).equals(name)) {
+                LatLngBounds newarkBounds = null;
+
+                try {
+                    Double latLngBoundNEN = rowValues.getAsDouble(DbContract.GroundOverlays.LAT_LNG_BOUND_NEN);
+                    Double latLngBoundNEE = rowValues.getAsDouble(DbContract.GroundOverlays.LAT_LNG_BOUND_NEE);
+                    Double latLngBoundSWN = rowValues.getAsDouble(DbContract.GroundOverlays.LAT_LNG_BOUND_SWN);
+                    Double latLngBoundSWE = rowValues.getAsDouble(DbContract.GroundOverlays.LAT_LNG_BOUND_SWE);
+
+                    // picture
+                    ImageView overlayPic = new ImageView(this);
+                    // получили закодированный массив битов в строку
+                    String imageString = rowValues.getAsString(DbContract.GroundOverlays.OVERLAY_PIC);
+                    byte[] encodedPicture = null;
+                    try {
+                        // декодируем строку в массив битов
+                        encodedPicture = imageString.getBytes("ISO-8859-1");
+                    } catch (Exception e) {}
+
+                    // из массива битов делаем bitmap
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(encodedPicture, 0, encodedPicture.length);
+
+                    newarkBounds = new LatLngBounds(
+                            new LatLng(latLngBoundNEN, latLngBoundNEE),       // South west corner
+                            new LatLng(latLngBoundSWN, latLngBoundSWE));      // North east corner
+
+                    GroundOverlayOptions newarkMap = new GroundOverlayOptions()
+                            .image(BitmapDescriptorFactory.fromBitmap(bitmap))
+                            .positionFromBounds(newarkBounds)
+                            .transparency(0.1f);
+
+                    GroundOverlay imageOverlay = mMap.addGroundOverlay(newarkMap);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        // получаем даннеы из БД и загружаем их в активити
+        loadDataFromDb(googleMap);
     }
 }
