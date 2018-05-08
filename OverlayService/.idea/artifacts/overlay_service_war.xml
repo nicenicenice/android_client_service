@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="overlay_service:war">
+    <output-path>$PROJECT_DIR$/out/artifacts/overlay_service</output-path>
+    <root id="archive" name="overlay_service.war">
+      <element id="artifact" artifact-name="overlay_service:war exploded" />
+    </root>
+  </artifact>
+</component>
