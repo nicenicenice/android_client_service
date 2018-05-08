@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 // подключаемся в сервису, скачиваем json array и
                     // обновляем свою таблицу БД в другом потоке
                 loadDataFromService();
+
             }
         });
 
@@ -123,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getBaseContext(), messageToShow, Toast.LENGTH_LONG).show();
 
                 mDbProvider.refreshDbData(result);
+                loadOverlayNamesFromDb();
             }
         };
         mDataLoadFromServiceTask.execute();
@@ -130,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setSpinnersAdapter(List<String> spinnerDataList) {
-        if (spinnerDataList == null) {
+        if (spinnerDataList == null || spinnerDataList.size() <= 0 ) {
             spinnerDataList =  new ArrayList<String>();
             spinnerDataList.add(getResources().getString(R.string.no_overlay_mes));
         }
@@ -141,5 +143,6 @@ public class MainActivity extends AppCompatActivity {
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
         assert spinner != null;
         spinner.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 }

@@ -6,7 +6,7 @@ package com.proj.mqliteclient.db;
 
 // просто набор констант, которые мы хотим использовать. (таблицы, поля и тп)
 public interface DbContract {
-    String DB_NAME = "main2.sqlite";
+    String DB_NAME = "main9.sqlite";
     String GR_OVERLAYS = "gr_overlays";
     interface GroundOverlays {
         String ID = "rowid";
