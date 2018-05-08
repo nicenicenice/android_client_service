@@ -3,7 +3,8 @@
     <string name="refr_button">REFRESH</string>
     <string name="show_button">DATA</string>
     <string name="title_activity_maps">Map</string>
-    <string-array name="overlays_array">
-        <item>there are no any overlays</item>
-    </string-array>
+    <string name="no_overlay_mes">there are no any overlays</string>
+    <string name="failed_getting_data">Данные с сервиса НЕ были получены</string>
+    <string name="success_getting_data">Данные с сервиса успешно получены</string>
+    <string name="unexpected_error_occurred">Произошла непредвиденная ошибка</string>
 </resources>

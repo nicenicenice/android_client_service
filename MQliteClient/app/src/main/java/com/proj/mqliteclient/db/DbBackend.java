@@ -87,12 +87,17 @@ class DbBackend implements DbContract {
     }
 
     // готовим запрос на выборку всез полей таблицы, (select * from test;)
-    public Cursor getAllDataFromTable() {
+    public Cursor getAllDataFromTable(String nameOfOverlay) {
         SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
         String table =  GR_OVERLAYS;
 
+        String where = nameOfOverlay == null
+                ? null : GroundOverlays.NAME + " LIKE ?";
+        String[] whereArgs = nameOfOverlay == null
+                ? null : new String[] {"%" + nameOfOverlay + "%"};
+
         Cursor c = db.query(table, null,
-                null, null, null, null, null);
+                where, whereArgs, null, null, null);
         if (c != null) {
             c.moveToFirst();
         }

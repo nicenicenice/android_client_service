@@ -7,12 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -21,7 +16,6 @@ import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.proj.mqliteclient.db.DbContract;
 import com.proj.mqliteclient.db.DbProvider;
 import com.proj.mqliteclient.db.DbUtils;
@@ -34,7 +28,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private DbProvider.ResultCallback<Cursor> mDataLoadDbCallback;
     private DbProvider mDbProvider;
-    String nameOfOverlay = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
-    private void loadDataFromDb(final GoogleMap googleMap) {
+    private void loadDataFromDb(final GoogleMap googleMap, String nameOfOverlay) {
 
         mDataLoadDbCallback = new DbProvider.ResultCallback<Cursor>() {
             @Override
@@ -59,62 +52,61 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 onDataLoadedFromDb(googleMap, result);
             }
         };
-        mDbProvider.getDataFromDb(mDataLoadDbCallback);
+        mDbProvider.getDataFromDb(mDataLoadDbCallback, nameOfOverlay);
     }
 
     private void onDataLoadedFromDb(GoogleMap googleMap, Cursor c) {
         mMap = googleMap;
-
-        Intent intent = getIntent();
-        String name = intent.getStringExtra("name");
 
         List<ContentValues> resList = DbUtils.getResultStringListAndClose(c);
 
         for (int i = 0; i < resList.size(); ++i) {
             ContentValues rowValues = resList.get(i);
 
-            if (rowValues.getAsString(DbContract.GroundOverlays.NAME).equals(name)) {
-                LatLngBounds newarkBounds = null;
+            LatLngBounds newarkBounds = null;
 
+            try {
+                Double latLngBoundNEN = rowValues.getAsDouble(DbContract.GroundOverlays.LAT_LNG_BOUND_NEN);
+                Double latLngBoundNEE = rowValues.getAsDouble(DbContract.GroundOverlays.LAT_LNG_BOUND_NEE);
+                Double latLngBoundSWN = rowValues.getAsDouble(DbContract.GroundOverlays.LAT_LNG_BOUND_SWN);
+                Double latLngBoundSWE = rowValues.getAsDouble(DbContract.GroundOverlays.LAT_LNG_BOUND_SWE);
+
+                // picture
+                // получили закодированный массив битов в строку
+                String imageString = rowValues.getAsString(DbContract.GroundOverlays.OVERLAY_PIC);
+                byte[] encodedPicture = null;
                 try {
-                    Double latLngBoundNEN = rowValues.getAsDouble(DbContract.GroundOverlays.LAT_LNG_BOUND_NEN);
-                    Double latLngBoundNEE = rowValues.getAsDouble(DbContract.GroundOverlays.LAT_LNG_BOUND_NEE);
-                    Double latLngBoundSWN = rowValues.getAsDouble(DbContract.GroundOverlays.LAT_LNG_BOUND_SWN);
-                    Double latLngBoundSWE = rowValues.getAsDouble(DbContract.GroundOverlays.LAT_LNG_BOUND_SWE);
+                    // декодируем строку в массив битов
+                    encodedPicture = imageString.getBytes("ISO-8859-1");
+                } catch (Exception e) {}
 
-                    // picture
-                    ImageView overlayPic = new ImageView(this);
-                    // получили закодированный массив битов в строку
-                    String imageString = rowValues.getAsString(DbContract.GroundOverlays.OVERLAY_PIC);
-                    byte[] encodedPicture = null;
-                    try {
-                        // декодируем строку в массив битов
-                        encodedPicture = imageString.getBytes("ISO-8859-1");
-                    } catch (Exception e) {}
+                // из массива битов делаем bitmap
+                Bitmap bitmap = BitmapFactory.decodeByteArray(encodedPicture, 0, encodedPicture.length);
 
-                    // из массива битов делаем bitmap
-                    Bitmap bitmap = BitmapFactory.decodeByteArray(encodedPicture, 0, encodedPicture.length);
+                newarkBounds = new LatLngBounds(
+                        new LatLng(latLngBoundNEN, latLngBoundNEE),       // South west corner
+                        new LatLng(latLngBoundSWN, latLngBoundSWE));      // North east corner
 
-                    newarkBounds = new LatLngBounds(
-                            new LatLng(latLngBoundNEN, latLngBoundNEE),       // South west corner
-                            new LatLng(latLngBoundSWN, latLngBoundSWE));      // North east corner
+                GroundOverlayOptions newarkMap = new GroundOverlayOptions()
+                        .image(BitmapDescriptorFactory.fromBitmap(bitmap))
+                        .positionFromBounds(newarkBounds)
+                        .transparency(0.1f);
 
-                    GroundOverlayOptions newarkMap = new GroundOverlayOptions()
-                            .image(BitmapDescriptorFactory.fromBitmap(bitmap))
-                            .positionFromBounds(newarkBounds)
-                            .transparency(0.1f);
-
-                    GroundOverlay imageOverlay = mMap.addGroundOverlay(newarkMap);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+                GroundOverlay imageOverlay = mMap.addGroundOverlay(newarkMap);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        Intent intent = getIntent();
+        String nameOfOverlay = intent.getStringExtra("name");
+        if (nameOfOverlay == null)
+            return;
+
         // получаем даннеы из БД и загружаем их в активити
-        loadDataFromDb(googleMap);
+        loadDataFromDb(googleMap, nameOfOverlay);
     }
 }

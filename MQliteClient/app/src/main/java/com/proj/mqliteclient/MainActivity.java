@@ -63,8 +63,6 @@ public class MainActivity extends AppCompatActivity {
                 // подключаемся в сервису, скачиваем json array и
                     // обновляем свою таблицу БД в другом потоке
                 loadDataFromService();
-                //Toast.makeText(getBaseContext(),
-                  //      "Данные успешно загружены", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -90,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         String selectedItem = spinner.getSelectedItem().toString();
         if (selectedItem == null) {
             Toast.makeText(getBaseContext(),
-                    "произошла непредвиденная ошибка", Toast.LENGTH_LONG).show();
+                    getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -116,11 +114,13 @@ public class MainActivity extends AppCompatActivity {
             protected void onPostExecute(JSONArray result) {
                 if (isCancelled()) return;
 
-                if (result == null)
-                    Toast.makeText(getBaseContext(),
-                            "Данные с сервиса НЕ были получены", Toast.LENGTH_LONG).show();
-                else
-                    Toast.makeText(getBaseContext(),"Данные с сервиса успешно получены", Toast.LENGTH_LONG).show();
+                String messageToShow = "";
+                if (result == null) {
+                    messageToShow = getResources().getString(R.string.failed_getting_data);
+                } else {
+                    messageToShow = getResources().getString(R.string.success_getting_data);
+                }
+                Toast.makeText(getBaseContext(), messageToShow, Toast.LENGTH_LONG).show();
 
                 mDbProvider.refreshDbData(result);
             }
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
     private void setSpinnersAdapter(List<String> spinnerDataList) {
         if (spinnerDataList == null) {
             spinnerDataList =  new ArrayList<String>();
-            spinnerDataList.add("there're no any overlays");
+            spinnerDataList.add(getResources().getString(R.string.no_overlay_mes));
         }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(

@@ -39,11 +39,11 @@ public class DbProvider {
     // в новом потоке готовим запрос
     // потом запускаем в основном потоке onFinished() переданной функции-коллбека
     // у нас это onDataLoadedFromDb(), которая делаем выборку из БД и вставляет данные в UI
-    public void getDataFromDb(final ResultCallback<Cursor> callback) {
+    public void getDataFromDb(final ResultCallback<Cursor> callback, final String nameOfOverlay) {
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                final Cursor c =  mDbBackend.getAllDataFromTable();
+                final Cursor c =  mDbBackend.getAllDataFromTable(nameOfOverlay);
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
