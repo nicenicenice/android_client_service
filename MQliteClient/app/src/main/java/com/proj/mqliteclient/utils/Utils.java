@@ -1,33 +1,18 @@
 package com.proj.mqliteclient.utils;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.WorkerThread;
-
 import org.json.JSONArray;
-
 import java.io.BufferedReader;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * Created by user on 31/07/2016.
  */
 public class Utils {
-    private static String SERVICE_URL = "http://10.0.2.2:8080/doctors_schedule/get_data";
+    private static String SERVICE_URL = "http://10.0.2.2:8080/overlay_service/get_data";
 
     // парсим json из полученного ответа сервиса
     @Nullable
