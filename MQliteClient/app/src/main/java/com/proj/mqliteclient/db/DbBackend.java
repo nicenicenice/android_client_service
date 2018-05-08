@@ -32,6 +32,8 @@ class DbBackend implements DbContract {
 
     // очищаем таблицу и заполняем новыми данными из полученного json array
     public void refreshTableWithJsonData(JSONArray response) {
+        if (response == null)
+            return;
         trunkateTable();
         insertJsonArrayIntoTable(response);
     }

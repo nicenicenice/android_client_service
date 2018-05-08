@@ -31,22 +31,16 @@ public class Utils {
 
     // парсим json из полученного ответа сервиса
     @Nullable
-    public static JSONArray getDataInJsonArrayFormat() {
+    public static JSONArray getDataInJsonArrayFormat() throws Exception {
         String rawResponce = getRawDataFromService();
-        if (rawResponce == null)
-            return null;
 
         JSONArray jsonResponce;
-        try {
-            jsonResponce = new JSONArray(rawResponce);
-            return jsonResponce;
-        } catch (Exception e) {
-            return null;
-        }
+        jsonResponce = new JSONArray(rawResponce);
+        return jsonResponce;
     }
 
     // подключаемся к сервису и получаем данные с него
-    private static String getRawDataFromService() {
+    private static String getRawDataFromService() throws Exception {
         BufferedReader inputStream;
         HttpURLConnection connection = null;
 
@@ -68,8 +62,7 @@ public class Utils {
             }
             return response.toString();
         } catch (Exception e) {
-            e.printStackTrace();
-            return null;
+            throw new Exception(e);
         } finally {
             if (connection != null) {
                 connection.disconnect();
