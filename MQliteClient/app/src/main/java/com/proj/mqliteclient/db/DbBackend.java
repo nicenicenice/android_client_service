@@ -92,9 +92,9 @@ class DbBackend implements DbContract {
         String table =  GR_OVERLAYS;
 
         String where = nameOfOverlay == null
-                ? null : GroundOverlays.NAME + " LIKE ?";
+                ? null : GroundOverlays.NAME + " = ?";
         String[] whereArgs = nameOfOverlay == null
-                ? null : new String[] {"%" + nameOfOverlay + "%"};
+                ? null : new String[] {nameOfOverlay};
 
         Cursor c = db.query(table, null,
                 where, whereArgs, null, null, null);

@@ -36,7 +36,7 @@ class DbOpenHelper extends SQLiteOpenHelper implements DbContract {
     // обновление
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE " + GR_OVERLAYS);
+        db.execSQL("DROP TABLE IF EXISTS " + GR_OVERLAYS);
         onCreate(db);
     }
 }
