@@ -1,11 +1,7 @@
 package my.test.gui.jdbc.controller;
 
-import my.test.gui.jdbc.contracts.ProductContract;
-import my.test.gui.jdbc.contracts.SlotContract;
-import my.test.gui.jdbc.contracts.WarehouseSlotContract;
+import my.test.gui.jdbc.contracts.*;
 import my.test.gui.jdbc.entities.Overlay;
-import my.test.gui.jdbc.contracts.OverlayContract;
-import my.test.gui.jdbc.entities.Slot;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -15,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import my.test.gui.jdbc.contracts.WarehouseContract.Warehouses;
 import my.test.gui.jdbc.contracts.OverlayContract.GroundOverlays;
 import my.test.gui.jdbc.contracts.WarehouseSlotContract.WarehouseSlots;
 import my.test.gui.jdbc.contracts.ProductContract.Products;
@@ -95,7 +92,10 @@ public class OverlayBean {
     }
 
     public List<Overlay> getOverlayListFromDB() {
-        String sql = "SELECT * FROM " + OverlayContract.GR_OVERLAYS;
+        String sql = "SELECT * FROM " + OverlayContract.GR_OVERLAYS + " INNER JOIN " + WarehouseContract.WAREHOUSE
+                + " ON " + OverlayContract.GR_OVERLAYS + "." + GroundOverlays.ID_WAREHOUSE + " = "
+                + WarehouseContract.WAREHOUSE + "." + Warehouses.ID;
+
         List<Overlay> overlayList = new ArrayList<>();
 
         try (Connection conn = this.connect();
@@ -104,7 +104,8 @@ public class OverlayBean {
 
             while (rs.next()) {
                 Overlay overlay = new Overlay();
-                overlay.setIdWarehouse(rs.getInt(GroundOverlays.ID_WAREHOUSE));
+                overlay.setIdWarehouse(rs.getInt(Warehouses.ID));
+                overlay.setWarehouseName(rs.getString(Warehouses.NAME));
                 overlay.setLatLngBoundNEN(rs.getString(GroundOverlays.LAT_LNG_BOUND_NEN));
                 overlay.setLatLngBoundNEE(rs.getString(GroundOverlays.LAT_LNG_BOUND_NEE));
                 overlay.setLatLngBoundSWN(rs.getString(GroundOverlays.LAT_LNG_BOUND_SWN));
@@ -126,8 +127,62 @@ public class OverlayBean {
         return overlayList;
     }
 
+    public boolean insertWarehouseToDb(String warehouseName) {
+        if (warehouseName == null || warehouseName.isEmpty())
+            return false;
+
+        String sql = "INSERT INTO " + WarehouseContract.WAREHOUSE
+                + "(" + Warehouses.NAME +")" + " VALUES(?)";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, warehouseName);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public int getWarehouseIdByNameFromDb(String warehouseName) {
+        if (warehouseName == null || warehouseName.isEmpty())
+            return -1;
+
+        int warehouseId = -1;
+
+        String sql = "SELECT * FROM " + WarehouseContract.WAREHOUSE
+                + " WHERE " + Warehouses.NAME + " = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, warehouseName);
+            ResultSet rs  = pstmt.executeQuery();
+
+            // loop through the result set
+            if (rs.next()) {
+                warehouseId = rs.getInt(Warehouses.ID);
+            }
+            return warehouseId;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     public boolean insertRowToDB(Overlay overlay) {
         if (overlay == null)
+            return false;
+
+        boolean succesResult = false;
+        succesResult = insertWarehouseToDb(overlay.getWarehouseName());
+
+        if (!succesResult)
+            return false;
+
+        int wakehouseId = getWarehouseIdByNameFromDb(overlay.getWarehouseName());
+        if (wakehouseId <= 0)
             return false;
 
         String sql = "INSERT INTO " + OverlayContract.GR_OVERLAYS + "("
@@ -141,7 +196,7 @@ public class OverlayBean {
 
         try (Connection conn = this.connect();
                  PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                    pstmt.setInt(1, overlay.getIdWarehouse());
+                    pstmt.setInt(1, wakehouseId);
                     pstmt.setString(2, overlay.getLatLngBoundNEN());
                     pstmt.setString(3, overlay.getLatLngBoundNEE());
                     pstmt.setString(4, overlay.getLatLngBoundSWE());
@@ -162,12 +217,37 @@ public class OverlayBean {
         }
     }
 
-    public boolean updateRowInDb(int idWarehouse, Overlay overlay) {
+    public boolean updateWarehouseById(int idWarehouse, String warehouseName) {
+        if (idWarehouse <= 0)
+            return false;
+
+        String sql = "UPDATE " + WarehouseContract.WAREHOUSE+ " SET "
+                + Warehouses.NAME + " = ?"
+                + " WHERE " + Warehouses.ID + " = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, warehouseName);
+            pstmt.setInt(2, idWarehouse);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateRowInDb(Overlay overlay) {
         if (overlay == null)
             return false;
 
+        // сначала меняем имя wharehouse,
+        // потом оверлей
+        boolean successResult = updateWarehouseById(overlay.getIdWarehouse(), overlay.getWarehouseName());
+        if (!successResult)
+            return false;
+
         String sql = "UPDATE " + OverlayContract.GR_OVERLAYS + " SET "
-                + GroundOverlays.ID_WAREHOUSE + " = ?" + ","
                 + GroundOverlays.LAT_LNG_BOUND_NEN + " = ?" + ","
                 + GroundOverlays.LAT_LNG_BOUND_NEE + " = ?" + ","
                 + GroundOverlays.LAT_LNG_BOUND_SWE + " = ?" + ","
@@ -177,11 +257,10 @@ public class OverlayBean {
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, overlay.getIdWarehouse());
-            pstmt.setString(2, overlay.getLatLngBoundNEN());
-            pstmt.setString(3, overlay.getLatLngBoundNEE());
-            pstmt.setString(4, overlay.getLatLngBoundSWE());
-            pstmt.setString(5, overlay.getLatLngBoundSWN());
+            pstmt.setString(1, overlay.getLatLngBoundNEN());
+            pstmt.setString(2, overlay.getLatLngBoundNEE());
+            pstmt.setString(3, overlay.getLatLngBoundSWE());
+            pstmt.setString(4, overlay.getLatLngBoundSWN());
 
             String imageString = overlay.getDecodedOverlayPic();
             byte[] pictureInBytes = null;
@@ -190,8 +269,8 @@ public class OverlayBean {
                 pictureInBytes = imageString.getBytes("ISO-8859-1");
             } catch (Exception e) {}
 
-            pstmt.setBytes(6, pictureInBytes);
-            pstmt.setInt(7, idWarehouse);
+            pstmt.setBytes(5, pictureInBytes);
+            pstmt.setInt(6, overlay.getIdWarehouse());
             pstmt.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -222,8 +301,10 @@ public class OverlayBean {
     }
 
     public Overlay getOverlayEqualTo(int idWarehouse) {
-        String sql = "SELECT * FROM " + OverlayContract.GR_OVERLAYS
-                + " WHERE " + GroundOverlays.ID_WAREHOUSE + " = ?";
+        String sql = "SELECT * FROM " + OverlayContract.GR_OVERLAYS + " INNER JOIN " + WarehouseContract.WAREHOUSE
+                + " ON " + OverlayContract.GR_OVERLAYS + "." + GroundOverlays.ID_WAREHOUSE + " = "
+                + WarehouseContract.WAREHOUSE + "." + Warehouses.ID
+                + " WHERE " + OverlayContract.GR_OVERLAYS + "." + GroundOverlays.ID_WAREHOUSE + " = ?";;
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt  = conn.prepareStatement(sql)) {
@@ -235,7 +316,8 @@ public class OverlayBean {
             Overlay overlay = null;
             if (rs.next()) {
                 overlay = new Overlay();
-                overlay.setIdWarehouse(rs.getInt(GroundOverlays.ID_WAREHOUSE));
+                overlay.setIdWarehouse(rs.getInt(Warehouses.ID));
+                overlay.setWarehouseName(rs.getString(Warehouses.NAME));
                 overlay.setLatLngBoundNEN(rs.getString(GroundOverlays.LAT_LNG_BOUND_NEN));
                 overlay.setLatLngBoundNEE(rs.getString(GroundOverlays.LAT_LNG_BOUND_NEE));
                 overlay.setLatLngBoundSWN(rs.getString(GroundOverlays.LAT_LNG_BOUND_SWN));

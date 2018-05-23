@@ -4,8 +4,8 @@ import my.test.gui.jdbc.entities.Overlay;
 import my.test.gui.jdbc.contracts.ProductContract;
 import my.test.gui.jdbc.controller.OverlayBean;
 import my.test.gui.jdbc.contracts.OverlayContract.GroundOverlays;
+import my.test.gui.jdbc.contracts.WarehouseContract.Warehouses;
 import my.test.gui.jdbc.contracts.SlotContract;
-import my.test.gui.jdbc.entities.Slot;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -22,9 +22,11 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class OverlayUI extends JPanel {
 
     // main form
-    private JButton createButton = new JButton("Create overlay");
-    private JButton editButton = new JButton("Edit overlay");
-    private JButton deleteButton = new JButton("Delete overlay");
+    private JButton createButton = new JButton("Добавить склад");
+    private JButton editButton = new JButton("Изменить склад");
+    private JButton deleteButton = new JButton("Удалить склад");
+    private JButton createSlot = new JButton("Добавить слот");
+    private JButton deleteSlot = new JButton("Удалить слот");
 
     // controller for work with db
     private OverlayBean bean = new OverlayBean();
@@ -53,15 +55,7 @@ public class OverlayUI extends JPanel {
         // add buttons
         add(initButtons(), 2);
 
-        // add info to the slot table when clicked an overlay
-        overlayTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent event) {
-                int selectedRow = overlayTable.getSelectedRow();
-                int idWarehouse = (int)overlayTable.getValueAt(selectedRow, 0);
-                if (idWarehouse > 0)
-                    repaintSlotTable(idWarehouse);
-            }
-        });
+        addRowClickListnerToOverlayTable();
     }
 
     // form to add overlay
@@ -160,6 +154,20 @@ public class OverlayUI extends JPanel {
         this.add(overlayScrollPane, 0);
         this.revalidate();
         this.repaint();
+
+        addRowClickListnerToOverlayTable();
+    }
+
+    private void addRowClickListnerToOverlayTable() {
+        // add info to the slot table when clicked an overlay
+        overlayTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                int selectedRow = overlayTable.getSelectedRow();
+                int idWarehouse = (int)overlayTable.getValueAt(selectedRow, 0);
+                if (idWarehouse > 0)
+                    repaintSlotTable(idWarehouse);
+            }
+        });
     }
 
     public void repaintSlotTable(int warehouseId) {
@@ -184,7 +192,7 @@ public class OverlayUI extends JPanel {
             data = new Object[1][columnNames.length];
         } else {
             Map<String, String> prodToSlot = bean.getSlotListFromDB(warehouseId);
-            if (prodToSlot == null && prodToSlot.size() <= 0) {
+            if (prodToSlot == null || prodToSlot.size() <= 0) {
                 data = new Object[1][columnNames.length];
             } else {
                 data = new Object[prodToSlot.size()][];
@@ -226,7 +234,8 @@ public class OverlayUI extends JPanel {
     private JTable getFilledOverlayTable() {
         // get column's names
         String[] columnNames = {
-                GroundOverlays.ID_WAREHOUSE,
+                Warehouses.ID,
+                Warehouses.NAME,
                 GroundOverlays.LAT_LNG_BOUND_NEE,
                 GroundOverlays.LAT_LNG_BOUND_NEN,
                 GroundOverlays.LAT_LNG_BOUND_SWE,

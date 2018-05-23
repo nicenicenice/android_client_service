@@ -9,8 +9,10 @@ public class Overlay {
     private String latLngBoundSWN;
     private String latLngBoundSWE;
     private String decodedOverlayPic;
+    private String warehouseName;
 
     public int getIdWarehouse() {return id_warehouse;}
+    public String getWarehouseName() {return warehouseName;}
     public String getLatLngBoundNEN() {return latLngBoundNEN;}
     public String getLatLngBoundNEE() {return latLngBoundNEE;}
     public String getLatLngBoundSWN() {return latLngBoundSWN;}
@@ -20,6 +22,7 @@ public class Overlay {
     public Object[] getFields() {
         return new Object[] {
             id_warehouse,
+            warehouseName,
             latLngBoundNEN,
             latLngBoundNEE,
             latLngBoundSWN,
@@ -28,6 +31,7 @@ public class Overlay {
         };
     }
     public void setIdWarehouse(int id_warehouse) { this.id_warehouse = id_warehouse; }
+    public void setWarehouseName(String warehouseName) { this.warehouseName = warehouseName; }
     public void setLatLngBoundNEN(String latLngBoundNEN) { this.latLngBoundNEN = latLngBoundNEN; }
     public void setLatLngBoundNEE(String latLngBoundNEE) { this.latLngBoundNEE = latLngBoundNEE; }
     public void setLatLngBoundSWN(String latLngBoundSWN) { this.latLngBoundSWN = latLngBoundSWN; }

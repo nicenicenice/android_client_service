@@ -2,6 +2,7 @@ package my.test.gui.jdbc.views;
 
 import my.test.gui.jdbc.entities.Overlay;
 import my.test.gui.jdbc.controller.OverlayBean;
+import org.apache.commons.io.FilenameUtils;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.*;
 import java.nio.file.Files;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -20,6 +22,7 @@ public class OverlayAddFrame extends JFrame {
 
     // frame for add overlay form
     private JTextField idWarehouse = new JTextField(30);
+    private JTextField nameWarehouse = new JTextField(30);
     private JTextField latLngBoundNEN = new JTextField(30);
     private JTextField latLngBoundNEE = new JTextField(30);
     private JTextField latLngBoundSWN = new JTextField(30);
@@ -33,6 +36,10 @@ public class OverlayAddFrame extends JFrame {
     private String decodedBytes;
     private File selectedImageFile = null;
 
+    private final int FRAME_WIDTH = 500;
+    private final int FRAME_HEIGHT = 550;
+    boolean isEditForm = false;
+
     public OverlayAddFrame() {}
 
     public OverlayAddFrame(JComponent component, Overlay overlay) {
@@ -44,6 +51,9 @@ public class OverlayAddFrame extends JFrame {
     public OverlayAddFrame(JComponent component) {
         super("Let's add an overlay to our DB");
 
+        OverlayUI parentComponent = (OverlayUI)component;
+        boolean isEditForm = parentComponent.areWeOpeningEditOverlayForm();
+
         JFrame that = this;
         iconLabel = new JLabel();
 
@@ -51,9 +61,17 @@ public class OverlayAddFrame extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(true);
 
-        JLabel lIDOfWarehouse = new JLabel("Id склада");
-        panel.add(lIDOfWarehouse);
-        panel.add(idWarehouse);
+        if (isEditForm) {
+            JLabel lIDOfWarehouse = new JLabel("Id склада");
+            panel.add(lIDOfWarehouse);
+            panel.add(idWarehouse);
+            idWarehouse.setEnabled(false);
+            isEditForm = true;
+        }
+
+        JLabel lNameOfWarehouse = new JLabel("Название склада");
+        panel.add(lNameOfWarehouse);
+        panel.add(nameWarehouse);
 
         JLabel lLatLngBoundNEN = new JLabel("Координата северо-восточного угла (с.ш.)");
         panel.add(lLatLngBoundNEN);
@@ -78,8 +96,7 @@ public class OverlayAddFrame extends JFrame {
         panel.add(chooseImage);
 
         // handle if we should add a new record or edit an old one
-        OverlayUI parentComponent = (OverlayUI)component;
-        if (parentComponent.areWeOpeningEditOverlayForm()) {
+        if (isEditForm) {
             panel.add(editOverlay);
             parentComponent.setAreWeOpeningEditOverlayForm(false);
         } else {
@@ -93,13 +110,17 @@ public class OverlayAddFrame extends JFrame {
                 file.setCurrentDirectory(new File(System.getProperty("user.home")));
                 //filter the files
                 FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                        "*.Images", "jpg", "gif", "png");
+                        "*.Images", "jpg", "png");
                 file.addChoosableFileFilter(filter);
                 int result = file.showSaveDialog(null);
 
                 //if the user click on save in Jfilechooser
                 if (result == JFileChooser.APPROVE_OPTION) {
                     selectedImageFile = file.getSelectedFile();
+
+                    //Image image = ImageIO.read(selectedImageFile);
+                    if (!checkUploadedImage(selectedImageFile))
+                        return;
 
                     // current uploaded image in a decodee string
                     try {
@@ -126,6 +147,11 @@ public class OverlayAddFrame extends JFrame {
                     showMessageDialog(null, "заполни форму, позорник");
                     return;
                 }
+
+                if (!checkCoordsRestrictions()) {
+                    showMessageDialog(null, "неправильные значения в координатах. (должно быть от -180.000000 до 180.000000)");
+                    return;
+                }
                 // forming data to insert to DB
                 Overlay overlay = getAllDataFromForm();
 
@@ -148,15 +174,16 @@ public class OverlayAddFrame extends JFrame {
                     showMessageDialog(null, "заполни форму, позорник");
                     return;
                 }
+
+                if (!checkCoordsRestrictions()) {
+                    showMessageDialog(null, "неправильные значения в координатах. (должно быть от -180.000000 до 180.000000)");
+                    return;
+                }
                 // get all form's data to update db
                 Overlay overlay = getAllDataFromForm();
 
                 // update data in a row
-                boolean isSuccessUpdating = new OverlayBean().updateRowInDb(idWarehouseOfOverlayToEdit, overlay);
-                if (idWarehouseOfOverlayToEdit <= 0) {
-                    showMessageDialog(null, "не удалось разобраться, какой оверлей изменять");
-                    return;
-                }
+                boolean isSuccessUpdating = new OverlayBean().updateRowInDb(overlay);
 
                 if (isSuccessUpdating) {
                     //OverlayUI panel = (OverlayUI)component;
@@ -169,7 +196,7 @@ public class OverlayAddFrame extends JFrame {
         add(BorderLayout.WEST, panel);
         setLayout(new FlowLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(500,500);
+        setSize(FRAME_WIDTH,FRAME_HEIGHT);
         setVisible(true);
         setResizable(false);
     }
@@ -179,6 +206,7 @@ public class OverlayAddFrame extends JFrame {
         //TODO:обработка ошибок
         idWarehouseOfOverlayToEdit = Integer.valueOf(idWarehouse.getText().trim());
 
+        nameWarehouse.setText(overlay.getWarehouseName());
         latLngBoundNEN.setText(overlay.getLatLngBoundNEN());
         latLngBoundNEE.setText(overlay.getLatLngBoundNEE());
         latLngBoundSWN.setText(overlay.getLatLngBoundSWN());
@@ -207,6 +235,7 @@ public class OverlayAddFrame extends JFrame {
     }
     private void clearForm() {
         idWarehouse.setText("");
+        nameWarehouse.setText("");
         latLngBoundNEN.setText("");
         latLngBoundNEE.setText("");
         latLngBoundSWN.setText("");
@@ -217,7 +246,10 @@ public class OverlayAddFrame extends JFrame {
 
     private Overlay getAllDataFromForm() {
         Overlay overlay = new Overlay();
-        overlay.setIdWarehouse(Integer.valueOf(idWarehouse.getText().trim()));
+
+        if (!idWarehouse.getText().isEmpty())
+            overlay.setIdWarehouse(Integer.valueOf(idWarehouse.getText().trim()));
+        overlay.setWarehouseName(nameWarehouse.getText());
         overlay.setLatLngBoundNEN(latLngBoundNEN.getText());
         overlay.setLatLngBoundNEN(latLngBoundNEN.getText());
         overlay.setLatLngBoundNEE(latLngBoundNEE.getText());
@@ -229,13 +261,59 @@ public class OverlayAddFrame extends JFrame {
 
     private boolean checkIfFormCompletyFilled() {
         return
-                !idWarehouse.getText().isEmpty() &&
+                !nameWarehouse.getText().isEmpty() &&
+                !(idWarehouse.getText().isEmpty() & isEditForm) &&
                 !latLngBoundNEN.getText().isEmpty() &&
                 !latLngBoundNEE.getText().isEmpty() &&
                 !latLngBoundSWN.getText().isEmpty() &&
                 !latLngBoundSWE.getText().isEmpty() &&
                         iconLabel.getIcon() != null;
 
+    }
+
+    private boolean checkCoordsRestrictions() {
+        double lowerLimit = -180.000000;
+        double upperLimit = 180.000000;
+
+        double locLatLngBoundNEN = Double.parseDouble(latLngBoundNEN.getText().trim());
+        double locLatLngBoundNEE = Double.parseDouble(latLngBoundNEE.getText().trim());
+        double locLatLngBoundSWN = Double.parseDouble(latLngBoundSWN.getText().trim());
+        double locLatLngBoundSWE = Double.parseDouble(latLngBoundSWE.getText().trim());
+        double[] formValues = {
+                locLatLngBoundNEN,
+                locLatLngBoundNEE,
+                locLatLngBoundSWN,
+                locLatLngBoundSWE
+        };
+
+        for (double val : formValues) {
+            if (lowerLimit - val > 0.0000001) {
+                return false;
+            }
+            if (val - upperLimit > 0.0000001) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkUploadedImage(File image) {
+        if (image == null)
+            return false;
+
+        String imageExtension = FilenameUtils.getExtension(image.getAbsolutePath());
+        if (!imageExtension.equals("jpg") && !imageExtension.equals("png")) {
+            showMessageDialog(null, "формат файла должен быть jpg или png");
+            return false;
+        }
+
+        double bytes = image.length();
+        if (bytes / 1024 > 200) {
+            showMessageDialog(null, "размер картинки не должен превышать 200кб");
+            return false;
+        }
+
+        return true;
     }
 
     // to resize imageIcon with the same size of a Jlabel
