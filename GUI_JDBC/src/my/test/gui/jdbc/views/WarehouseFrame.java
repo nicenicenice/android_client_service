@@ -2,7 +2,6 @@ package my.test.gui.jdbc.views;
 
 import my.test.gui.jdbc.entities.Overlay;
 import my.test.gui.jdbc.controller.OverlayBean;
-import my.test.gui.jdbc.entities.Product;
 import my.test.gui.jdbc.resources.Strings.FormStrings;
 import org.apache.commons.io.FilenameUtils;
 

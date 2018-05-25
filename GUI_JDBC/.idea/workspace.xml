@@ -16,59 +16,61 @@
       <file leaf-file-name="OverlayBean.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/my/test/gui/jdbc/controller/OverlayBean.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="538" column="0" lean-forward="false" selection-start-line="538" selection-start-column="0" selection-end-line="538" selection-end-column="0" />
+            <state relative-caret-position="-1199">
+              <caret line="21" column="62" lean-forward="true" selection-start-line="21" selection-start-column="62" selection-end-line="21" selection-end-column="62" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1527256210271" expanded="true" signature="1472:1486" ph="SELECT * FRO... product" />
-                <marker date="1527256210271" expanded="true" signature="1472:1513" ph="SELECT * FRO... warehouse_slot" />
-                <marker date="1527256210271" expanded="true" signature="2235:2471" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="2235:2502" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="2235:2533" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="2235:2708" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="2235:2942" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="3941:3955" ph="SELECT * FRO... warehouse" />
-                <marker date="1527256210271" expanded="true" signature="4747:4867" ph="SELECT * FRO... warehouse_slot" />
-                <marker date="1527256210271" expanded="true" signature="5920:5934" ph="SELECT * FRO... overlay" />
-                <marker date="1527256210271" expanded="true" signature="5920:5970" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="5920:5971" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="5920:6021" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="5920:6022" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="5920:6048" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="5920:6087" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="5920:6088" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="5920:6136" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="5920:6240" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="5920:6244" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="5920:6268" ph="SELECT * FRO... slot" />
-                <marker date="1527256210271" expanded="true" signature="6943:6957" ph="SELECT * FRO... gr_overlays" />
-                <marker date="1527256210271" expanded="true" signature="6943:7185" ph="SELECT * FRO... overlay" />
-                <marker date="1527256210271" expanded="true" signature="8719:8821" ph="INSERT INTO overlay... " />
-                <marker date="1527256210271" expanded="true" signature="9365:9464" ph="SELECT * FRO... warehouse_slot" />
-                <marker date="1527256210271" expanded="true" signature="10100:10213" ph="INSERT INTO overlay... " />
-                <marker date="1527256210271" expanded="true" signature="10626:10799" ph="UPDATE warehouse... " />
-                <marker date="1527256210271" expanded="true" signature="11308:11481" ph="UPDATE slot... " />
-                <marker date="1527256210271" expanded="true" signature="12674:12883" ph="INSERT INTO slot... " />
-                <marker date="1527256210271" expanded="true" signature="13329:13355" ph="SELECT last_... " />
-                <marker date="1527256210271" expanded="true" signature="13329:13365" ph="SELECT last_... " />
-                <marker date="1527256210271" expanded="true" signature="13329:13366" ph="SELECT * FRO... warehouse" />
-                <marker date="1527256210271" expanded="true" signature="13936:14115" ph="INSERT INTO slot... " />
-                <marker date="1527256210271" expanded="true" signature="15008:15428" ph="INSERT INTO gr_overlays... " />
-                <marker date="1527256210271" expanded="true" signature="16610:16752" ph="UPDATE warehouse... " />
-                <marker date="1527256210271" expanded="true" signature="17430:17478" ph="UPDATE gr_overlays... " />
-                <marker date="1527256210271" expanded="true" signature="17430:17537" ph="UPDATE gr_overlays... " />
-                <marker date="1527256210271" expanded="true" signature="17430:17543" ph="UPDATE gr_overlays... " />
-                <marker date="1527256210271" expanded="true" signature="17430:17862" ph="UPDATE gr_overlays... " />
-                <marker date="1527256210271" expanded="true" signature="17430:17864" ph="INSERT INTO gr_overlays... " />
-                <marker date="1527256210271" expanded="true" signature="18924:19059" ph="UPDATE overlay... " />
-                <marker date="1527256210271" expanded="true" signature="19930:20043" ph="DELETE FROM slot... " />
-                <marker date="1527256210271" expanded="true" signature="20543:20623" ph="DELETE FROM slot... " />
-                <marker date="1527256210271" expanded="true" signature="21101:21113" ph="DELETE FROM missingValue... " />
-                <marker date="1527256210271" expanded="true" signature="21101:21171" ph="DELETE FROM name... " />
-                <marker date="1527256210271" expanded="true" signature="21101:21210" ph="DELETE FROM warehouses... " />
-                <marker date="1527256210271" expanded="true" signature="21766:21855" ph="DELETE FROM overlay... " />
-                <marker date="1527256210271" expanded="true" signature="22349:22591" ph="SELECT * FRO... overlay" />
-                <marker date="1527256210271" expanded="true" signature="22349:22710" ph="SELECT * FRO... overlay" />
+                <marker date="1527265621889" expanded="true" signature="1472:1486" ph="SELECT * FRO... product" />
+                <marker date="1527265621889" expanded="true" signature="1472:1513" ph="SELECT * FRO... warehouse_slot" />
+                <marker date="1527265621889" expanded="true" signature="2235:2471" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="2235:2502" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="2235:2533" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="2235:2708" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="2235:2942" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="3941:3955" ph="SELECT * FRO... warehouse" />
+                <marker date="1527265621889" expanded="true" signature="4747:4867" ph="SELECT * FRO... warehouse_slot" />
+                <marker date="1527265621889" expanded="true" signature="5920:5934" ph="SELECT * FRO... overlay" />
+                <marker date="1527265621889" expanded="true" signature="5920:5970" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="5920:5971" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="5920:6021" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="5920:6022" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="5920:6048" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="5920:6087" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="5920:6088" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="5920:6136" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="5920:6240" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="5920:6244" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="5920:6268" ph="SELECT * FRO... slot" />
+                <marker date="1527265621889" expanded="true" signature="6943:6957" ph="SELECT * FRO... gr_overlays" />
+                <marker date="1527265621889" expanded="true" signature="6943:7185" ph="SELECT * FRO... overlay" />
+                <marker date="1527265621889" expanded="true" signature="8719:8821" ph="INSERT INTO overlay... " />
+                <marker date="1527265621889" expanded="true" signature="9365:9464" ph="SELECT * FRO... warehouse_slot" />
+                <marker date="1527265621889" expanded="true" signature="10100:10213" ph="INSERT INTO overlay... " />
+                <marker date="1527265621889" expanded="true" signature="10626:10799" ph="UPDATE warehouse... " />
+                <marker date="1527265621889" expanded="true" signature="11308:11481" ph="UPDATE slot... " />
+                <marker date="1527265621889" expanded="true" signature="12674:12883" ph="INSERT INTO slot... " />
+                <marker date="1527265621889" expanded="true" signature="13329:13355" ph="SELECT last_... " />
+                <marker date="1527265621889" expanded="true" signature="13329:13365" ph="SELECT last_... " />
+                <marker date="1527265621889" expanded="true" signature="13329:13366" ph="SELECT * FRO... warehouse" />
+                <marker date="1527265621889" expanded="true" signature="13936:14115" ph="INSERT INTO slot... " />
+                <marker date="1527265621889" expanded="true" signature="15008:15428" ph="INSERT INTO gr_overlays... " />
+                <marker date="1527265621889" expanded="true" signature="16610:16752" ph="UPDATE warehouse... " />
+                <marker date="1527265621889" expanded="true" signature="17430:17478" ph="UPDATE gr_overlays... " />
+                <marker date="1527265621889" expanded="true" signature="17430:17537" ph="UPDATE gr_overlays... " />
+                <marker date="1527265621889" expanded="true" signature="17430:17543" ph="UPDATE gr_overlays... " />
+                <marker date="1527265621889" expanded="true" signature="17430:17862" ph="UPDATE gr_overlays... " />
+                <marker date="1527265621889" expanded="true" signature="17430:17864" ph="INSERT INTO gr_overlays... " />
+                <marker date="1527265621889" expanded="true" signature="18924:19059" ph="UPDATE overlay... " />
+                <marker date="1527265621889" expanded="true" signature="19930:20043" ph="DELETE FROM slot... " />
+                <marker date="1527265621889" expanded="true" signature="20543:20623" ph="DELETE FROM slot... " />
+                <marker date="1527265621889" expanded="true" signature="21101:21210" ph="DELETE FROM overlay... " />
+                <marker date="1527265621889" expanded="true" signature="21782:21891" ph="DELETE FROM overlay... " />
+                <marker date="1527265621889" expanded="true" signature="22412:22507" ph="DELETE FROM overlay... " />
+                <marker date="1527265621889" expanded="true" signature="23026:23144" ph="DELETE FROM warehouse... " />
+                <marker date="1527265621889" expanded="true" signature="24392:24513" ph="DELETE FROM missingValue... " />
+                <marker date="1527265621889" expanded="true" signature="25019:25108" ph="DELETE FROM overlay... " />
+                <marker date="1527265621889" expanded="true" signature="25602:25844" ph="SELECT * FRO... overlay" />
+                <marker date="1527265621889" expanded="true" signature="25602:25963" ph="SELECT * FRO... overlay" />
               </folding>
             </state>
           </provider>
@@ -84,11 +86,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="OverlayUI.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="OverlayUI.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/my/test/gui/jdbc/views/OverlayUI.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="273">
-              <caret line="32" column="54" lean-forward="false" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
+            <state relative-caret-position="3003">
+              <caret line="168" column="76" lean-forward="false" selection-start-line="168" selection-start-column="40" selection-end-line="168" selection-end-column="76" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1765#1766#0" expanded="true" />
@@ -166,11 +168,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SlotFrame.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="SlotFrame.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/my/test/gui/jdbc/views/SlotFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="111">
-              <caret line="75" column="31" lean-forward="false" selection-start-line="75" selection-start-column="31" selection-end-line="75" selection-end-column="31" />
+            <state relative-caret-position="223">
+              <caret line="72" column="74" lean-forward="false" selection-start-line="72" selection-start-column="57" selection-end-line="72" selection-end-column="74" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1255#1256#0" expanded="true" />
@@ -180,12 +182,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Utils.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/my/test/gui/jdbc/Utils.java">
+      <file leaf-file-name="WarehouseFrame.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/my/test/gui/jdbc/views/WarehouseFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="11" column="29" lean-forward="false" selection-start-line="11" selection-start-column="29" selection-end-line="11" selection-end-column="29" />
-              <folding />
+            <state relative-caret-position="1610">
+              <caret line="124" column="69" lean-forward="false" selection-start-line="124" selection-start-column="57" selection-end-line="124" selection-end-column="69" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -257,12 +261,12 @@
         <option value="$PROJECT_DIR$/src/my/test/gui/jdbc/views/ProductFrame.java" />
         <option value="$PROJECT_DIR$/src/my/test/gui/jdbc/entities/Warehouse.java" />
         <option value="$PROJECT_DIR$/src/my/test/gui/jdbc/views/AddEditProductFrame.java" />
-        <option value="$PROJECT_DIR$/src/my/test/gui/jdbc/views/WarehouseFrame.java" />
-        <option value="$PROJECT_DIR$/src/my/test/gui/jdbc/views/OverlayUI.java" />
         <option value="$PROJECT_DIR$/src/my/test/gui/jdbc/entities/Slot.java" />
         <option value="$PROJECT_DIR$/src/my/test/gui/jdbc/views/AddEditSlotFrame.java" />
-        <option value="$PROJECT_DIR$/src/my/test/gui/jdbc/controller/OverlayBean.java" />
         <option value="$PROJECT_DIR$/src/my/test/gui/jdbc/views/SlotFrame.java" />
+        <option value="$PROJECT_DIR$/src/my/test/gui/jdbc/views/WarehouseFrame.java" />
+        <option value="$PROJECT_DIR$/src/my/test/gui/jdbc/views/OverlayUI.java" />
+        <option value="$PROJECT_DIR$/src/my/test/gui/jdbc/controller/OverlayBean.java" />
       </list>
     </option>
   </component>
@@ -280,8 +284,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="65" />
-    <option name="y" value="86" />
+    <option name="x" value="15" />
+    <option name="y" value="48" />
     <option name="width" value="1440" />
     <option name="height" value="808" />
   </component>
@@ -300,8 +304,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
       <pane id="Scratches" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -353,7 +358,6 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -362,6 +366,7 @@
     <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -503,14 +508,15 @@
       <workItem from="1527212220548" duration="851000" />
       <workItem from="1527239327639" duration="13435000" />
       <workItem from="1527255558160" duration="763000" />
+      <workItem from="1527261015933" duration="3175000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="120212000" />
+    <option name="totallyTimeSpent" value="123387000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="86" width="1440" height="808" extended-state="0" />
+    <frame x="15" y="48" width="1440" height="808" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -521,25 +527,25 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15147266" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15147266" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32959327" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37587658" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37587658" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32959327" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -581,11 +587,17 @@
           <properties />
           <option name="timeStamp" value="90" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/my/test/gui/jdbc/controller/OverlayBean.java</url>
+          <line>659</line>
+          <properties />
+          <option name="timeStamp" value="92" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="91" />
+      <option name="time" value="93" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -611,7 +623,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Desktop/freelansim/OverlayService/src/my/android/service/OverlayService.java">
+    <entry file="file://$PROJECT_DIR$/../OverlayService/src/my/android/service/OverlayService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-349">
           <caret line="75" column="30" lean-forward="false" selection-start-line="75" selection-start-column="30" selection-end-line="75" selection-end-column="30" />
@@ -823,16 +835,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/my/test/gui/jdbc/views/WarehouseFrame.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7035">
-          <caret line="349" column="1" lean-forward="false" selection-start-line="349" selection-start-column="1" selection-end-line="349" selection-end-column="1" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_121.jdk/Contents/Home/src.zip!/java/awt/Component.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="317">
@@ -938,20 +940,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/my/test/gui/jdbc/views/OverlayUI.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="273">
-          <caret line="32" column="54" lean-forward="false" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1765#1766#0" expanded="true" />
-            <element signature="e#1815#1816#0" expanded="true" />
-            <element signature="e#1877#1878#0" expanded="true" />
-            <element signature="e#1926#1927#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/my/test/gui/jdbc/views/AddEditSlotFrame.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3528">
@@ -962,73 +950,99 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/my/test/gui/jdbc/controller/OverlayBean.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="186">
-          <caret line="538" column="0" lean-forward="false" selection-start-line="538" selection-start-column="0" selection-end-line="538" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1527256210271" expanded="true" signature="1472:1486" ph="SELECT * FRO... product" />
-            <marker date="1527256210271" expanded="true" signature="1472:1513" ph="SELECT * FRO... warehouse_slot" />
-            <marker date="1527256210271" expanded="true" signature="2235:2471" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="2235:2502" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="2235:2533" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="2235:2708" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="2235:2942" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="3941:3955" ph="SELECT * FRO... warehouse" />
-            <marker date="1527256210271" expanded="true" signature="4747:4867" ph="SELECT * FRO... warehouse_slot" />
-            <marker date="1527256210271" expanded="true" signature="5920:5934" ph="SELECT * FRO... overlay" />
-            <marker date="1527256210271" expanded="true" signature="5920:5970" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="5920:5971" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="5920:6021" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="5920:6022" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="5920:6048" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="5920:6087" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="5920:6088" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="5920:6136" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="5920:6240" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="5920:6244" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="5920:6268" ph="SELECT * FRO... slot" />
-            <marker date="1527256210271" expanded="true" signature="6943:6957" ph="SELECT * FRO... gr_overlays" />
-            <marker date="1527256210271" expanded="true" signature="6943:7185" ph="SELECT * FRO... overlay" />
-            <marker date="1527256210271" expanded="true" signature="8719:8821" ph="INSERT INTO overlay... " />
-            <marker date="1527256210271" expanded="true" signature="9365:9464" ph="SELECT * FRO... warehouse_slot" />
-            <marker date="1527256210271" expanded="true" signature="10100:10213" ph="INSERT INTO overlay... " />
-            <marker date="1527256210271" expanded="true" signature="10626:10799" ph="UPDATE warehouse... " />
-            <marker date="1527256210271" expanded="true" signature="11308:11481" ph="UPDATE slot... " />
-            <marker date="1527256210271" expanded="true" signature="12674:12883" ph="INSERT INTO slot... " />
-            <marker date="1527256210271" expanded="true" signature="13329:13355" ph="SELECT last_... " />
-            <marker date="1527256210271" expanded="true" signature="13329:13365" ph="SELECT last_... " />
-            <marker date="1527256210271" expanded="true" signature="13329:13366" ph="SELECT * FRO... warehouse" />
-            <marker date="1527256210271" expanded="true" signature="13936:14115" ph="INSERT INTO slot... " />
-            <marker date="1527256210271" expanded="true" signature="15008:15428" ph="INSERT INTO gr_overlays... " />
-            <marker date="1527256210271" expanded="true" signature="16610:16752" ph="UPDATE warehouse... " />
-            <marker date="1527256210271" expanded="true" signature="17430:17478" ph="UPDATE gr_overlays... " />
-            <marker date="1527256210271" expanded="true" signature="17430:17537" ph="UPDATE gr_overlays... " />
-            <marker date="1527256210271" expanded="true" signature="17430:17543" ph="UPDATE gr_overlays... " />
-            <marker date="1527256210271" expanded="true" signature="17430:17862" ph="UPDATE gr_overlays... " />
-            <marker date="1527256210271" expanded="true" signature="17430:17864" ph="INSERT INTO gr_overlays... " />
-            <marker date="1527256210271" expanded="true" signature="18924:19059" ph="UPDATE overlay... " />
-            <marker date="1527256210271" expanded="true" signature="19930:20043" ph="DELETE FROM slot... " />
-            <marker date="1527256210271" expanded="true" signature="20543:20623" ph="DELETE FROM slot... " />
-            <marker date="1527256210271" expanded="true" signature="21101:21113" ph="DELETE FROM missingValue... " />
-            <marker date="1527256210271" expanded="true" signature="21101:21171" ph="DELETE FROM name... " />
-            <marker date="1527256210271" expanded="true" signature="21101:21210" ph="DELETE FROM warehouses... " />
-            <marker date="1527256210271" expanded="true" signature="21766:21855" ph="DELETE FROM overlay... " />
-            <marker date="1527256210271" expanded="true" signature="22349:22591" ph="SELECT * FRO... overlay" />
-            <marker date="1527256210271" expanded="true" signature="22349:22710" ph="SELECT * FRO... overlay" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/my/test/gui/jdbc/views/SlotFrame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="111">
-          <caret line="75" column="31" lean-forward="false" selection-start-line="75" selection-start-column="31" selection-end-line="75" selection-end-column="31" />
+        <state relative-caret-position="223">
+          <caret line="72" column="74" lean-forward="false" selection-start-line="72" selection-start-column="57" selection-end-line="72" selection-end-column="74" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1255#1256#0" expanded="true" />
             <element signature="e#1288#1289#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/my/test/gui/jdbc/views/WarehouseFrame.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1610">
+          <caret line="124" column="69" lean-forward="false" selection-start-line="124" selection-start-column="57" selection-end-line="124" selection-end-column="69" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/my/test/gui/jdbc/controller/OverlayBean.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1199">
+          <caret line="21" column="62" lean-forward="true" selection-start-line="21" selection-start-column="62" selection-end-line="21" selection-end-column="62" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1527265621889" expanded="true" signature="1472:1486" ph="SELECT * FRO... product" />
+            <marker date="1527265621889" expanded="true" signature="1472:1513" ph="SELECT * FRO... warehouse_slot" />
+            <marker date="1527265621889" expanded="true" signature="2235:2471" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="2235:2502" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="2235:2533" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="2235:2708" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="2235:2942" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="3941:3955" ph="SELECT * FRO... warehouse" />
+            <marker date="1527265621889" expanded="true" signature="4747:4867" ph="SELECT * FRO... warehouse_slot" />
+            <marker date="1527265621889" expanded="true" signature="5920:5934" ph="SELECT * FRO... overlay" />
+            <marker date="1527265621889" expanded="true" signature="5920:5970" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="5920:5971" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="5920:6021" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="5920:6022" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="5920:6048" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="5920:6087" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="5920:6088" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="5920:6136" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="5920:6240" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="5920:6244" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="5920:6268" ph="SELECT * FRO... slot" />
+            <marker date="1527265621889" expanded="true" signature="6943:6957" ph="SELECT * FRO... gr_overlays" />
+            <marker date="1527265621889" expanded="true" signature="6943:7185" ph="SELECT * FRO... overlay" />
+            <marker date="1527265621889" expanded="true" signature="8719:8821" ph="INSERT INTO overlay... " />
+            <marker date="1527265621889" expanded="true" signature="9365:9464" ph="SELECT * FRO... warehouse_slot" />
+            <marker date="1527265621889" expanded="true" signature="10100:10213" ph="INSERT INTO overlay... " />
+            <marker date="1527265621889" expanded="true" signature="10626:10799" ph="UPDATE warehouse... " />
+            <marker date="1527265621889" expanded="true" signature="11308:11481" ph="UPDATE slot... " />
+            <marker date="1527265621889" expanded="true" signature="12674:12883" ph="INSERT INTO slot... " />
+            <marker date="1527265621889" expanded="true" signature="13329:13355" ph="SELECT last_... " />
+            <marker date="1527265621889" expanded="true" signature="13329:13365" ph="SELECT last_... " />
+            <marker date="1527265621889" expanded="true" signature="13329:13366" ph="SELECT * FRO... warehouse" />
+            <marker date="1527265621889" expanded="true" signature="13936:14115" ph="INSERT INTO slot... " />
+            <marker date="1527265621889" expanded="true" signature="15008:15428" ph="INSERT INTO gr_overlays... " />
+            <marker date="1527265621889" expanded="true" signature="16610:16752" ph="UPDATE warehouse... " />
+            <marker date="1527265621889" expanded="true" signature="17430:17478" ph="UPDATE gr_overlays... " />
+            <marker date="1527265621889" expanded="true" signature="17430:17537" ph="UPDATE gr_overlays... " />
+            <marker date="1527265621889" expanded="true" signature="17430:17543" ph="UPDATE gr_overlays... " />
+            <marker date="1527265621889" expanded="true" signature="17430:17862" ph="UPDATE gr_overlays... " />
+            <marker date="1527265621889" expanded="true" signature="17430:17864" ph="INSERT INTO gr_overlays... " />
+            <marker date="1527265621889" expanded="true" signature="18924:19059" ph="UPDATE overlay... " />
+            <marker date="1527265621889" expanded="true" signature="19930:20043" ph="DELETE FROM slot... " />
+            <marker date="1527265621889" expanded="true" signature="20543:20623" ph="DELETE FROM slot... " />
+            <marker date="1527265621889" expanded="true" signature="21101:21210" ph="DELETE FROM overlay... " />
+            <marker date="1527265621889" expanded="true" signature="21782:21891" ph="DELETE FROM overlay... " />
+            <marker date="1527265621889" expanded="true" signature="22412:22507" ph="DELETE FROM overlay... " />
+            <marker date="1527265621889" expanded="true" signature="23026:23144" ph="DELETE FROM warehouse... " />
+            <marker date="1527265621889" expanded="true" signature="24392:24513" ph="DELETE FROM missingValue... " />
+            <marker date="1527265621889" expanded="true" signature="25019:25108" ph="DELETE FROM overlay... " />
+            <marker date="1527265621889" expanded="true" signature="25602:25844" ph="SELECT * FRO... overlay" />
+            <marker date="1527265621889" expanded="true" signature="25602:25963" ph="SELECT * FRO... overlay" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/my/test/gui/jdbc/views/OverlayUI.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3003">
+          <caret line="168" column="76" lean-forward="false" selection-start-line="168" selection-start-column="40" selection-end-line="168" selection-end-column="76" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1765#1766#0" expanded="true" />
+            <element signature="e#1815#1816#0" expanded="true" />
+            <element signature="e#1877#1878#0" expanded="true" />
+            <element signature="e#1926#1927#0" expanded="true" />
           </folding>
         </state>
       </provider>

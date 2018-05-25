@@ -166,7 +166,7 @@ public class OverlayUI extends JPanel {
             return;
 
         int idWarehouse = (int)overlayTable.getValueAt(selectedRow, 0);
-        boolean isOverlayDeleted = bean.deleteOverlayFromDbByWarehouseId(idWarehouse);
+        boolean isOverlayDeleted = bean.deleteOverlayAndRelatedRecordsFromDb(idWarehouse);
         if (!isOverlayDeleted) {
             showMessageDialog(null, "ошибка при удалении записи");
             return;

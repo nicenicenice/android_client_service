@@ -598,6 +598,104 @@ public class OverlayBean {
         }
     }
 
+    private boolean deleteOverlayFromDBByWarehouseId(int idWarehouse) {
+        if (idWarehouse <= 0)
+            return false;
+
+        String sql = "DELETE FROM " + OverlayContract.GR_OVERLAYS
+                + " WHERE " + GroundOverlays.ID_WAREHOUSE + " = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, idWarehouse);
+            // execute the delete statement
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean deleteWarehoseFromDBById(int idWarehouse) {
+        if (idWarehouse <= 0)
+            return false;
+
+        String sql = "DELETE FROM " + WarehouseContract.WAREHOUSE
+                + " WHERE " + Warehouses.ID + " = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, idWarehouse);
+            // execute the delete statement
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void deleteBindingTableWarehouseSlot(int idWarehouse) {
+        if (idWarehouse <= 0)
+            return;
+
+        String sql = "DELETE FROM " + WarehouseSlotContract.WAREHOUSE_SLOT
+                + " WHERE " + WarehouseSlots.ID_WAREHOUSE + " = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, idWarehouse);
+            // execute the delete statement
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean deleteOverlayAndRelatedRecordsFromDb(int idWarehouse) {
+        if (!deleteOverlayFromDBByWarehouseId(idWarehouse))
+            return false;
+
+        if (!deleteWarehoseFromDBById(idWarehouse))
+            return false;
+
+        // get all related slots id
+        List<Integer> slitIds = getSlotIdsBy(idWarehouse);
+        // delete all related slots
+        deleteSlotsRelatedToWarehouseInDb(slitIds);
+
+        deleteBindingTableWarehouseSlot(idWarehouse);
+        return true;
+    }
+
+    private void deleteSlotsRelatedToWarehouseInDb(List<Integer> listSlotIds) {
+        if (listSlotIds == null || listSlotIds.size() <= 0)
+            return;
+
+        int numSlots = listSlotIds.size();
+        String rawPlaceholdersStr = new String(new char[numSlots]).replace("\0", "?,");
+        String placeholdersStr = rawPlaceholdersStr.substring(0, rawPlaceholdersStr.length() - 1);
+
+        String sql = "DELETE FROM " + SlotContract.SLOT
+                + " WHERE " + Slots.ID
+                + " IN (" + placeholdersStr + ")";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            for (int i = 0; i < listSlotIds.size(); i++) {
+                pstmt.setInt(i + 1, listSlotIds.get(i));
+            }
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public boolean deleteProductFromDbByProdId(int prodId) {
         if (prodId <= 0)
             return false;
