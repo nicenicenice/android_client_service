@@ -3,7 +3,7 @@ package my.test.gui.jdbc.views;
 import my.test.gui.jdbc.Utils;
 import my.test.gui.jdbc.entities.Overlay;
 import my.test.gui.jdbc.contracts.ProductContract;
-import my.test.gui.jdbc.controller.OverlayBean;
+import my.test.gui.jdbc.db.OverlayBean;
 import my.test.gui.jdbc.contracts.OverlayContract.GroundOverlays;
 import my.test.gui.jdbc.contracts.WarehouseContract.Warehouses;
 import my.test.gui.jdbc.contracts.SlotContract;
@@ -21,7 +21,6 @@ import java.util.List;
 import static javax.swing.JOptionPane.showMessageDialog;
 import static my.test.gui.jdbc.Utils.okcancel;
 
-// TODO: cоздать вес необходимые таблица, если они не созданы
 public class OverlayUI extends JPanel {
     private static final int ADD_FORM = 1;
     private static final int EDIT_FORM = 2;
@@ -30,9 +29,8 @@ public class OverlayUI extends JPanel {
     private JButton addWarehouseButton = new JButton("Добавить склад");
     private JButton editWarehouseButton = new JButton("Изменить склад");
     private JButton deleteWarehouseButton = new JButton("Удалить склад");
-    private JButton addSlotButton = new JButton("Слоты");
-    private JButton deleteSlotButton = new JButton("Удалить слот");
-    private JButton addProdButton = new JButton("Продукты");
+    private JButton slotButton = new JButton("Слоты");
+    private JButton prodButton = new JButton("Продукты");
     private JTable overlayTable = new JTable();
     private JTable slotTable = new JTable();
     private JScrollPane overlayScrollPane;
@@ -130,15 +128,15 @@ public class OverlayUI extends JPanel {
             public void actionPerformed(ActionEvent event) { deleteSelectedRow(); }
         });
 
-        panel.add(addProdButton);
-        addProdButton.addActionListener(new ActionListener() {
+        panel.add(prodButton);
+        prodButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 addProduct();
             }
         });
 
-        panel.add(addSlotButton);
-        addSlotButton.addActionListener(new ActionListener() {
+        panel.add(slotButton);
+        slotButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
                 addSlot();
             }
@@ -242,8 +240,9 @@ public class OverlayUI extends JPanel {
                 while (it.hasNext()) {
                     data[i] = new Object[2];
                     Map.Entry pair = (Map.Entry)it.next();
-                    String prodName = (String)pair.getKey();
-                    String slotName = (String)pair.getValue();
+                    String slotName = (String)pair.getKey();
+                    String prodName = (String)pair.getValue();
+
                     data[i][0] = slotName;
                     data[i][1] = prodName;
                     i++;

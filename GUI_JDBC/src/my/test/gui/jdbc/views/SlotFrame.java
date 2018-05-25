@@ -4,11 +4,8 @@ import my.test.gui.jdbc.Utils;
 import my.test.gui.jdbc.contracts.ProductContract.Products;
 import my.test.gui.jdbc.contracts.SlotContract.Slots;
 import my.test.gui.jdbc.contracts.WarehouseContract.Warehouses;
-import my.test.gui.jdbc.controller.OverlayBean;
-import my.test.gui.jdbc.entities.Overlay;
-import my.test.gui.jdbc.entities.Product;
+import my.test.gui.jdbc.db.OverlayBean;
 import my.test.gui.jdbc.entities.Slot;
-import my.test.gui.jdbc.entities.Warehouse;
 import my.test.gui.jdbc.resources.Strings.FormStrings;
 
 import java.awt.*;

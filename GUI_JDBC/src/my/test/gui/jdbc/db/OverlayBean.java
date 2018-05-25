@@ -1,4 +1,4 @@
-package my.test.gui.jdbc.controller;
+package my.test.gui.jdbc.db;
 
 import my.test.gui.jdbc.contracts.*;
 import my.test.gui.jdbc.entities.Overlay;
@@ -21,14 +21,15 @@ import my.test.gui.jdbc.contracts.SlotContract.Slots;
 
 import static my.test.gui.jdbc.Utils.getDecodedStringFromBlob;
 
-// TODO: проверка на инициализацию таблиц
 // Controller
 public class OverlayBean {
     private static final Logger LOG = Logger.getLogger(OverlayBean.class);
     static final String JDBC_DRIVER = "org.sqlite.JDBC";
     static final String DB_URL = "jdbc:sqlite:/Users/user/gr_overlays.db";
 
-    public OverlayBean() {}
+    public OverlayBean() {
+        initDb();
+    }
 
     private Connection connect() {
         Connection conn = null;
@@ -39,6 +40,10 @@ public class OverlayBean {
             e.printStackTrace();
         }
         return conn;
+    }
+
+    private void initDb() {
+        new DbOpenHelper();
     }
 
     public List<Product> getProdListFromDb() {
@@ -168,7 +173,7 @@ public class OverlayBean {
             ResultSet rs  = pstmt.executeQuery();
 
             while (rs.next()) {
-                prodToSlot.put(rs.getString(Products.NAME), rs.getString(Slots.NAME));
+                prodToSlot.put(rs.getString(Slots.NAME), rs.getString(Products.NAME));
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage());

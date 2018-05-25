@@ -2,8 +2,7 @@ package my.test.gui.jdbc.views;
 
 import my.test.gui.jdbc.Utils;
 import my.test.gui.jdbc.contracts.ProductContract.Products;
-import my.test.gui.jdbc.controller.OverlayBean;
-import my.test.gui.jdbc.entities.Overlay;
+import my.test.gui.jdbc.db.OverlayBean;
 import my.test.gui.jdbc.entities.Product;
 import my.test.gui.jdbc.resources.Strings.FormStrings;
 
@@ -13,8 +12,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 import static my.test.gui.jdbc.Utils.okcancel;

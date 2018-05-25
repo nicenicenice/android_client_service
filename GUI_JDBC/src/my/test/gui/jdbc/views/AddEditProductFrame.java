@@ -1,6 +1,6 @@
 package my.test.gui.jdbc.views;
 
-import my.test.gui.jdbc.controller.OverlayBean;
+import my.test.gui.jdbc.db.OverlayBean;
 import my.test.gui.jdbc.entities.Product;
 
 import java.awt.*;
