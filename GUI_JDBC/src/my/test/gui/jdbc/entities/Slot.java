@@ -1,18 +1,41 @@
 package my.test.gui.jdbc.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Slot {
-    private List<String> products = new ArrayList<>();
-    public List<String> getProducts() {
-        return products;
+    public Slot() {}
+
+    public Slot(int id, String name, int prodId, int warehouseId) {
+        this(id, name, prodId);
+        this.warehouseId = warehouseId;
     }
-    public void setProducts(List<String> products) {
-        this.products = products;
+
+    public Slot(int id, String name, int prodId) {
+        this.id = id;
+        this.name = name;
+        this.prodId = prodId;
     }
-    public void addProductName(String prodName) {
-        products.add(prodName);
+
+    private int id;
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    private int prodId;
+    public int getProdId() {
+        return prodId;
+    }
+    public void setProdId(int prod_id) {
+        this.prodId = prod_id;
+    }
+
+    private int warehouseId;
+    public int getWarehouseId() {
+        return warehouseId;
+    }
+    public void setWarehouseId(int warehouseId) {
+        this.warehouseId = warehouseId;
     }
 
     private String name = null;
@@ -23,10 +46,30 @@ public class Slot {
         this.name = name;
     }
 
+    private String warehouseName = null;
+    public String getWarehouseName() {
+        return warehouseName;
+    }
+    public void setWarehouseName(String warehouseName) {
+        this.warehouseName = warehouseName;
+    }
+
+    private String prodName = null;
+    public String getProdName() {
+        return prodName;
+    }
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
+    }
+
     public Object[] getFields() {
         return new Object[] {
-            products,
-            name
+            id,
+            name,
+            prodId,
+            prodName,
+            warehouseId,
+            warehouseName
         };
     }
 

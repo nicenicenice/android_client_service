@@ -2,9 +2,12 @@ package my.test.gui.jdbc.views;
 
 import my.test.gui.jdbc.Utils;
 import my.test.gui.jdbc.contracts.ProductContract.Products;
+import my.test.gui.jdbc.contracts.SlotContract.Slots;
+import my.test.gui.jdbc.contracts.WarehouseContract.Warehouses;
 import my.test.gui.jdbc.controller.OverlayBean;
 import my.test.gui.jdbc.entities.Overlay;
 import my.test.gui.jdbc.entities.Product;
+import my.test.gui.jdbc.entities.Slot;
 import my.test.gui.jdbc.entities.Warehouse;
 import my.test.gui.jdbc.resources.Strings.FormStrings;
 
@@ -14,8 +17,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 import static my.test.gui.jdbc.Utils.okcancel;
@@ -24,9 +25,9 @@ public class SlotFrame extends JFrame {
     // controller for work with db
     private OverlayBean bean = new OverlayBean();;
 
-    private JButton addProductButton = new JButton("Добавить новый слот");
-    private JButton editProductButton = new JButton("Изменить выбранный слот");
-    private JButton deleteProductButton = new JButton("Удалить выбранный слот");
+    private JButton addSlotButton = new JButton("Добавить новый слот");
+    private JButton editSlotButton = new JButton("Изменить выбранный слот");
+    private JButton deleteSlotButton = new JButton("Удалить выбранный слот");
 
     private final int FRAME_WIDTH = 500;
     private final int FRAME_HEIGHT = 540;
@@ -36,11 +37,8 @@ public class SlotFrame extends JFrame {
     }
     private boolean isFormEdit = false;
 
-    JComboBox<Product> productList = new JComboBox<Product>();
-    JComboBox<Warehouse> warehouseList = new JComboBox<Warehouse>();
-
-    private JTable productTable = new JTable();
-    private JScrollPane productScrollPane = new JScrollPane();
+    private JTable slotTable = new JTable();
+    private JScrollPane slotScrollPane = new JScrollPane();
 
     JFrame that;
 
@@ -50,11 +48,12 @@ public class SlotFrame extends JFrame {
         super("Форма работы со слотами");
         that = this;
 
-        //productScrollPane = getProductScrollPaneWithTable();
-        //add(productScrollPane);
-        add(editProductButton);
-        add(addProductButton);
-        add(deleteProductButton);
+        slotScrollPane = getSlotScrollPaneWithTable();
+        add(slotScrollPane);
+
+        add(editSlotButton);
+        add(addSlotButton);
+        add(deleteSlotButton);
 
         initButtons();
 
@@ -65,31 +64,50 @@ public class SlotFrame extends JFrame {
         setResizable(false);
     }
 
-    private JComboBox<Product> toFillProductJCombo() {
-        JComboBox<Product> productList = new JComboBox<Product>();
-        return productList;
-    }
-
-    private JComboBox<Warehouse> toFillWarehouseJCombo() {
-        JComboBox<Warehouse> warehouseList = new JComboBox<Warehouse>();
-        return warehouseList;
-    }
     private void initButtons() {
-        addProductButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) { showAddProdFrame(); }
+        addSlotButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) { showAddSlotFrame(); }
         });
 
-        editProductButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) { showEditProdFrame(); }
+        editSlotButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) { showEditSlotFrame(); }
         });
 
-        deleteProductButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) { deleteSelectedProduct(); }
+        deleteSlotButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) { deleteSelectedSlot(); }
         });
     }
 
-    private void deleteSelectedProduct() {
-        int selectedRow = productTable.getSelectedRow();
+    private void showAddSlotFrame() {
+        EventQueue.invokeLater(() -> {
+            isFormEdit = false;
+            AddEditSlotFrame frame = new AddEditSlotFrame(that);
+        });
+    }
+
+    private void showEditSlotFrame() {
+        EventQueue.invokeLater(() -> {
+            int selectedRow = slotTable.getSelectedRow();
+            if (selectedRow < 0) {
+                showMessageDialog(null, FormStrings.NEEDS_TO_CHOOSE_ROW);
+                return;
+            }
+
+            //TODO: обработка ошибок
+            int slotId = (int)slotTable.getValueAt(selectedRow, 0);
+            String prodName = (String)slotTable.getValueAt(selectedRow, 1);
+            int prodId = (int)slotTable.getValueAt(selectedRow, 2);
+            int warehouseId = (int)slotTable.getValueAt(selectedRow, 4);
+
+            Slot chosenSlot = new Slot(slotId, prodName, prodId, warehouseId);
+
+            isFormEdit = true;
+            AddEditSlotFrame frame = new AddEditSlotFrame(that, chosenSlot);
+        });
+    }
+
+    private void deleteSelectedSlot() {
+        int selectedRow = slotTable.getSelectedRow();
         if (selectedRow < 0) {
             showMessageDialog(null, FormStrings.NEEDS_TO_CHOOSE_ROW);
             return;
@@ -98,71 +116,50 @@ public class SlotFrame extends JFrame {
         if (okcancel("Вы уверены?") == 2)
             return;
 
-        int prodId = (int)productTable.getValueAt(selectedRow, 0);
+        int slotId = (int)slotTable.getValueAt(selectedRow, 0);
 
-        if (!bean.deleteProductFromDbByProdId(prodId)) {
+        // TODO: для слота переделать
+        if (!bean.deleteProductFromDbByProdId(slotId)) {
             showMessageDialog(null, FormStrings.ERROR_WHILE_DELETE_RECORD);
             return;
         }
-        repaintProdTable();
+        repaintSlotTable();
     }
 
-    public void repaintProdTable() {
-        this.remove(productScrollPane);
-        productScrollPane = getProductScrollPaneWithTable();
-        this.add(productScrollPane, 0);
+    public void repaintSlotTable() {
+        this.remove(slotScrollPane);
+        slotScrollPane = getSlotScrollPaneWithTable();
+        this.add(slotScrollPane, 0);
         this.revalidate();
         this.repaint();
     }
 
-    private void showAddProdFrame() {
-        EventQueue.invokeLater(() -> {
-            isFormEdit = false;
-            AddEditProductFrame frame = new AddEditProductFrame(that);
-        });
+    private JScrollPane getSlotScrollPaneWithTable() {
+        slotTable = getFilledSlotTable();
+        slotTable.setFillsViewportHeight(true);
+        slotScrollPane = new JScrollPane(slotTable);
+        return slotScrollPane;
     }
 
-    private void showEditProdFrame() {
-        EventQueue.invokeLater(() -> {
-            int selectedRow = productTable.getSelectedRow();
-            if (selectedRow < 0) {
-                showMessageDialog(null, FormStrings.NEEDS_TO_CHOOSE_ROW);
-                return;
-            }
-
-            //TODO: обработка ошибок
-            int prodId = (int)productTable.getValueAt(selectedRow, 0);
-            String prodName = (String)productTable.getValueAt(selectedRow, 1);
-
-            Product chosenProduct = new Product(prodId, prodName);
-
-            isFormEdit = true;
-            AddEditProductFrame frame = new AddEditProductFrame(that, chosenProduct);
-        });
-    }
-
-    private JScrollPane getProductScrollPaneWithTable() {
-        productTable = getFilledProdTable();
-        productTable.setFillsViewportHeight(true);
-        productScrollPane = new JScrollPane(productTable);
-        return productScrollPane;
-    }
-
-    private JTable getFilledProdTable() {
+    private JTable getFilledSlotTable() {
         // get column's names
         String[] columnNames = {
-                Products.ID,
-                Products.NAME
+            Slots.ID,
+            Slots.NAME,
+            Slots.ID_PRODUCT,
+            Products.NAME,
+            Warehouses.ID,
+            Warehouses.NAME
         };
 
         // get data
         Object[][] data = null;
 
-        java.util.List<Product> prodList = bean.getProdListFromDb();
+        List<Slot> slotList = bean.getSlotListWithAllInfoFromDb();
         List<Object[]> rows = new ArrayList<>();
 
-        for (Product prodItem : prodList) {
-            Object[] row = prodItem.getFields();
+        for (Slot slotItem : slotList) {
+            Object[] row = slotItem.getFields();
             rows.add(row);
         }
 

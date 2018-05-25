@@ -3,6 +3,8 @@ package my.test.gui.jdbc.controller;
 import my.test.gui.jdbc.contracts.*;
 import my.test.gui.jdbc.entities.Overlay;
 import my.test.gui.jdbc.entities.Product;
+import my.test.gui.jdbc.entities.Slot;
+import my.test.gui.jdbc.entities.Warehouse;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
@@ -55,6 +57,63 @@ public class OverlayBean {
                 productList.add(prod);
             }
             return productList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Slot> getSlotListWithAllInfoFromDb() {
+        String sql = "SELECT * FROM " + SlotContract.SLOT
+                + " INNER JOIN " + ProductContract.PRODUCT
+                + " ON " + SlotContract.SLOT + "." + SlotContract.Slots.ID_PRODUCT + " = "
+                    + ProductContract.PRODUCT + "." + ProductContract.Products.ID
+                + " INNER JOIN " + WarehouseSlotContract.WAREHOUSE_SLOT
+                + " ON " + SlotContract.SLOT + "." + Slots.ID + " = "
+                    + WarehouseSlotContract.WAREHOUSE_SLOT + "." + WarehouseSlots.ID_SLOT
+                + " INNER JOIN " + WarehouseContract.WAREHOUSE
+                + " ON " + WarehouseContract.WAREHOUSE + "." + Warehouses.ID + " = "
+                + WarehouseSlotContract.WAREHOUSE_SLOT + "." + WarehouseSlots.ID_WAREHOUSE;
+
+        List<Slot> slotList = new ArrayList<>();
+        try (Connection conn = this.connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)) {
+
+            // loop through the result set
+            while (rs.next()) {
+                Slot slot = new Slot();
+                slot.setId(rs.getInt(Slots.ID));
+                slot.setProdId(rs.getInt(Slots.ID_PRODUCT));
+                slot.setWarehouseId(rs.getInt(WarehouseSlots.ID_WAREHOUSE));
+                slot.setName(rs.getString(Slots.NAME));
+                slot.setProdName(rs.getString(Products.NAME));
+                slot.setWarehouseName(rs.getString(Warehouses.NAME));
+                slotList.add(slot);
+            }
+            return slotList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Warehouse> getWarehouseListFromDb() {
+        String sql = "SELECT * FROM " + WarehouseContract.WAREHOUSE;
+
+        List<Warehouse> warehouseList = new ArrayList<>();
+        try (Connection conn = this.connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet rs    = stmt.executeQuery(sql)) {
+
+            // loop through the result set
+            while (rs.next()) {
+                Warehouse warehouse = new Warehouse();
+                warehouse.setId(rs.getInt(Warehouses.ID));
+                warehouse.setName(rs.getString(Warehouses.NAME));
+                warehouseList.add(warehouse);
+            }
+            return warehouseList;
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -213,6 +272,131 @@ public class OverlayBean {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    private boolean updateSlotTable(Slot slot) {
+        String sql = "UPDATE " + SlotContract.SLOT + " SET "
+                + Slots.NAME + " = ?" + ","
+                + Slots.ID_PRODUCT + " = ?"
+                + " WHERE " + Slots.ID + " = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, slot.getName());
+            pstmt.setInt(2, slot.getProdId());
+            pstmt.setInt(3, slot.getId());
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean updateWarehouseSlotTable(Slot slot) {
+        String sql = "UPDATE " + WarehouseSlotContract.WAREHOUSE_SLOT + " SET "
+                + WarehouseSlots.ID_WAREHOUSE + " = ?"
+                + " WHERE " + WarehouseSlots.ID_SLOT + " = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, slot.getWarehouseId());
+            pstmt.setInt(2, slot.getId());
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateBindingOfWarehouseAndSlot(Slot slot) {
+        if (!updateSlotTable(slot))
+            return false;
+
+        if (!updateWarehouseSlotTable(slot))
+            return false;
+
+        return true;
+    }
+
+    public boolean insertSlotToDBWithBindings(Slot slot) {
+        if (slot == null || slot.getWarehouseId() <= 0)
+            return false;
+
+        int insertedSlotId = getIdOfInsertedSlotIntoDB(slot);
+        if (insertedSlotId <= 0)
+            return false;
+
+        if (!insertBindingOfWarehouseAndSlot(insertedSlotId, slot.getWarehouseId()))
+            return false;
+        return true;
+    }
+
+    private boolean insertBindingOfWarehouseAndSlot(int slotId, int warehouseId) {
+        if (slotId <= 0 || warehouseId <= 0)
+            return false;
+
+        String sql = "INSERT INTO "
+            + WarehouseSlotContract.WAREHOUSE_SLOT + "("
+                + WarehouseSlots.ID_SLOT + ","
+                + WarehouseSlots.ID_WAREHOUSE
+            + ")"
+            + " VALUES(?,?)";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, slotId);
+            pstmt.setInt(2, warehouseId);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private int getLastInsertRowid(Connection conn) {
+        String sql = "SELECT last_insert_rowid() AS row_id";
+
+        try (Statement stmt  = conn.createStatement();
+             ResultSet rs  = stmt.executeQuery(sql)) {
+
+            // loop through the result set
+            int lastInsertedRowId = -1;
+            if (rs.next()) {
+                lastInsertedRowId = rs.getInt("row_id");
+            }
+            return lastInsertedRowId;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
+    private int getIdOfInsertedSlotIntoDB(Slot slot) {
+        if (slot == null)
+            return -1;
+
+        String sql = "INSERT INTO "
+                + SlotContract.SLOT + "("
+                + Slots.NAME + ","
+                + Slots.ID_PRODUCT
+                + ")"
+                + " VALUES(?,?)";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, slot.getName());
+            pstmt.setInt(2, slot.getProdId());
+            pstmt.executeUpdate();
+
+            int lastInsertedRow = getLastInsertRowid(conn);
+            return lastInsertedRow;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
         }
     }
 

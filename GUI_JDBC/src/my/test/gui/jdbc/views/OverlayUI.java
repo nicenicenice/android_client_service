@@ -30,7 +30,7 @@ public class OverlayUI extends JPanel {
     private JButton addWarehouseButton = new JButton("Добавить склад");
     private JButton editWarehouseButton = new JButton("Изменить склад");
     private JButton deleteWarehouseButton = new JButton("Удалить склад");
-    private JButton addSlotButton = new JButton("Добавить слот");
+    private JButton addSlotButton = new JButton("Слоты");
     private JButton deleteSlotButton = new JButton("Удалить слот");
     private JButton addProdButton = new JButton("Продукты");
     private JTable overlayTable = new JTable();
@@ -103,6 +103,13 @@ public class OverlayUI extends JPanel {
         });
     }
 
+    private void addSlot() {
+        JPanel that = this;
+
+        EventQueue.invokeLater(() -> {
+            SlotFrame frame = new SlotFrame(that);
+        });
+    }
 
     private JPanel initButtons() {
         JPanel panel = new JPanel();
@@ -130,19 +137,12 @@ public class OverlayUI extends JPanel {
             }
         });
 
-//        panel.add(deleteProd);
-//        deleteProd.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent event) {
-//                //addProduct();
-//            }
-//        });
-//
-//        panel.add(addSlot);
-//        addSlot.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent event) {
-//                //addProduct();
-//            }
-//        });
+        panel.add(addSlotButton);
+        addSlotButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+                addSlot();
+            }
+        });
 //
 //        panel.add(deleteSlot);
 //        deleteSlot.addActionListener(new ActionListener() {
