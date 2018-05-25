@@ -526,6 +526,57 @@ public class OverlayBean {
         }
     }
 
+    public boolean deleteAllRecordsRelatedWithSlotInDb(int slotId) {
+        if (slotId <= 0)
+            return false;
+
+        if (!deleteSlotFromDbBySlotId(slotId))
+            return false;
+
+        if (!deleteSlotBindingFromDbBySlotId(slotId))
+            return false;
+
+        return true;
+    }
+
+    private boolean deleteSlotBindingFromDbBySlotId(int slotId) {
+        if (slotId <= 0)
+            return false;
+
+        // delete record in Slot table
+        String sql = "DELETE FROM " + WarehouseSlotContract.WAREHOUSE_SLOT
+                + " WHERE " + WarehouseSlots.ID_SLOT + " = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, slotId);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private boolean deleteSlotFromDbBySlotId(int slotId) {
+        if (slotId <= 0)
+            return false;
+
+        // delete record in Slot table
+        String sql = "DELETE FROM " + SlotContract.SLOT
+                + " WHERE " + Slots.ID + " = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, slotId);
+            pstmt.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean deleteOverlayFromDbByWarehouseId(int idWarehouse) {
         if (idWarehouse <= 0)
             return false;

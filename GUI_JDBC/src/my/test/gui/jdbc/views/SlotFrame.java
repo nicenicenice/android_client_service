@@ -118,8 +118,7 @@ public class SlotFrame extends JFrame {
 
         int slotId = (int)slotTable.getValueAt(selectedRow, 0);
 
-        // TODO: для слота переделать
-        if (!bean.deleteProductFromDbByProdId(slotId)) {
+        if (!bean.deleteAllRecordsRelatedWithSlotInDb(slotId)) {
             showMessageDialog(null, FormStrings.ERROR_WHILE_DELETE_RECORD);
             return;
         }
