@@ -1,8 +1,8 @@
 package my.test.gui.jdbc.entities;
 
-public class Product {
-    public Product() {}
-    public Product (int id, String name) {
+public class Warehouse {
+    public Warehouse() {}
+    public Warehouse (int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -25,8 +25,8 @@ public class Product {
 
     public Object[] getFields() {
         return new Object[] {
-            id,
-            name
+                id,
+                name
         };
     }
 

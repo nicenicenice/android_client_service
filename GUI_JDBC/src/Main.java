@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Main {
-    final static int MAIN_WIDTH = 940;
+    final static int MAIN_WIDTH = 1250;
     final static int MAIN_HEIGHT = 520;
 
     public static void main(String[] args) {

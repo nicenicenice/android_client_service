@@ -1,3 +1,4 @@
+
 package my.test.gui.jdbc.controller;
 
 import my.test.gui.jdbc.contracts.*;
@@ -21,12 +22,12 @@ import static my.test.gui.jdbc.Utils.getDecodedStringFromBlob;
 
 // TODO: проверка на инициализацию таблиц
 // Controller
-public class OverlayBean {
-    private static final Logger LOG = Logger.getLogger(OverlayBean.class);
+public class DbBackend {
+    private static final Logger LOG = Logger.getLogger(DbBackend.class);
     static final String JDBC_DRIVER = "org.sqlite.JDBC";
     static final String DB_URL = "jdbc:sqlite:/Users/user/gr_overlays.db";
 
-    public OverlayBean() {}
+    public DbBackend() {}
 
     private Connection connect() {
         Connection conn = null;
@@ -95,9 +96,9 @@ public class OverlayBean {
         String placeholdersStr = rawPlaceholdersStr.substring(0, rawPlaceholdersStr.length() - 1);
 
         String sql = "SELECT * FROM " + SlotContract.SLOT + " INNER JOIN " + ProductContract.PRODUCT
-                + " ON " + SlotContract.SLOT + "." + SlotContract.Slots.ID_PRODUCT + " = "
-                + ProductContract.PRODUCT + "." + ProductContract.Products.ID
-                + " WHERE " + SlotContract.Slots.ID
+                + " ON " + SlotContract.SLOT + "." + Slots.ID_PRODUCT + " = "
+                + ProductContract.PRODUCT + "." + Products.ID
+                + " WHERE " + Slots.ID
                 + " IN (" + placeholdersStr + ")";
 
         Map<String, String> prodToSlot = new HashMap<>();
@@ -109,7 +110,7 @@ public class OverlayBean {
             ResultSet rs  = pstmt.executeQuery();
 
             while (rs.next()) {
-                prodToSlot.put(rs.getString(Products.NAME), rs.getString(Slots.NAME));
+                prodToSlot.put(rs.getString(ProductContract.Products.NAME), rs.getString(SlotContract.Slots.NAME));
             }
         } catch (SQLException e) {
             LOG.error(e.getMessage());
@@ -158,7 +159,7 @@ public class OverlayBean {
             return false;
 
         String sql = "INSERT INTO " + WarehouseContract.WAREHOUSE
-                + "(" + Warehouses.NAME +")" + " VALUES(?)";
+                + "(" + WarehouseContract.Warehouses.NAME +")" + " VALUES(?)";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -178,7 +179,7 @@ public class OverlayBean {
         int warehouseId = -1;
 
         String sql = "SELECT * FROM " + WarehouseContract.WAREHOUSE
-                + " WHERE " + Warehouses.NAME + " = ?";
+                + " WHERE " + WarehouseContract.Warehouses.NAME + " = ?";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt  = conn.prepareStatement(sql)) {
@@ -188,7 +189,7 @@ public class OverlayBean {
 
             // loop through the result set
             if (rs.next()) {
-                warehouseId = rs.getInt(Warehouses.ID);
+                warehouseId = rs.getInt(WarehouseContract.Warehouses.ID);
             }
             return warehouseId;
         } catch (SQLException e) {
@@ -202,7 +203,7 @@ public class OverlayBean {
             return false;
 
         String sql = "INSERT INTO "
-                + ProductContract.PRODUCT + "(" + Products.NAME + ")"
+                + ProductContract.PRODUCT + "(" + ProductContract.Products.NAME + ")"
                 + " VALUES(?)";
 
         try (Connection conn = this.connect();
@@ -231,31 +232,31 @@ public class OverlayBean {
             return false;
 
         String sql = "INSERT INTO " + OverlayContract.GR_OVERLAYS + "("
-                + GroundOverlays.ID_WAREHOUSE + ","
-                + GroundOverlays.LAT_LNG_BOUND_NEN + ","
-                + GroundOverlays.LAT_LNG_BOUND_NEE + ","
-                + GroundOverlays.LAT_LNG_BOUND_SWE + ","
-                + GroundOverlays.LAT_LNG_BOUND_SWN + ","
-                + GroundOverlays.OVERLAY_PIC + ")"
+                + OverlayContract.GroundOverlays.ID_WAREHOUSE + ","
+                + OverlayContract.GroundOverlays.LAT_LNG_BOUND_NEN + ","
+                + OverlayContract.GroundOverlays.LAT_LNG_BOUND_NEE + ","
+                + OverlayContract.GroundOverlays.LAT_LNG_BOUND_SWE + ","
+                + OverlayContract.GroundOverlays.LAT_LNG_BOUND_SWN + ","
+                + OverlayContract.GroundOverlays.OVERLAY_PIC + ")"
                 + " VALUES(?,?,?,?,?,?)";
 
         try (Connection conn = this.connect();
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                    pstmt.setInt(1, wakehouseId);
-                    pstmt.setString(2, overlay.getLatLngBoundNEN());
-                    pstmt.setString(3, overlay.getLatLngBoundNEE());
-                    pstmt.setString(4, overlay.getLatLngBoundSWE());
-                    pstmt.setString(5, overlay.getLatLngBoundSWN());
-                    String imageInString = overlay.getDecodedOverlayPic();
-                    byte[] imageInBytes = null;
-                    try {
-                        // декодируем строку в массив битов
-                        imageInBytes = imageInString.getBytes("ISO-8859-1");
-                    } catch (Exception e) {}
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, wakehouseId);
+            pstmt.setString(2, overlay.getLatLngBoundNEN());
+            pstmt.setString(3, overlay.getLatLngBoundNEE());
+            pstmt.setString(4, overlay.getLatLngBoundSWE());
+            pstmt.setString(5, overlay.getLatLngBoundSWN());
+            String imageInString = overlay.getDecodedOverlayPic();
+            byte[] imageInBytes = null;
+            try {
+                // декодируем строку в массив битов
+                imageInBytes = imageInString.getBytes("ISO-8859-1");
+            } catch (Exception e) {}
 
-                    pstmt.setBytes(6, imageInBytes);
-                    pstmt.executeUpdate();
-                    return true;
+            pstmt.setBytes(6, imageInBytes);
+            pstmt.executeUpdate();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -267,8 +268,8 @@ public class OverlayBean {
             return false;
 
         String sql = "UPDATE " + WarehouseContract.WAREHOUSE+ " SET "
-                + Warehouses.NAME + " = ?"
-                + " WHERE " + Warehouses.ID + " = ?";
+                + WarehouseContract.Warehouses.NAME + " = ?"
+                + " WHERE " + WarehouseContract.Warehouses.ID + " = ?";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -291,12 +292,12 @@ public class OverlayBean {
             return false;
 
         String sql = "UPDATE " + OverlayContract.GR_OVERLAYS + " SET "
-                + GroundOverlays.LAT_LNG_BOUND_NEN + " = ?" + ","
-                + GroundOverlays.LAT_LNG_BOUND_NEE + " = ?" + ","
-                + GroundOverlays.LAT_LNG_BOUND_SWE + " = ?" + ","
-                + GroundOverlays.LAT_LNG_BOUND_SWN + " = ?" + ","
-                + GroundOverlays.OVERLAY_PIC + " = ?"
-                + " WHERE " + GroundOverlays.ID_WAREHOUSE + " = ?";
+                + OverlayContract.GroundOverlays.LAT_LNG_BOUND_NEN + " = ?" + ","
+                + OverlayContract.GroundOverlays.LAT_LNG_BOUND_NEE + " = ?" + ","
+                + OverlayContract.GroundOverlays.LAT_LNG_BOUND_SWE + " = ?" + ","
+                + OverlayContract.GroundOverlays.LAT_LNG_BOUND_SWN + " = ?" + ","
+                + OverlayContract.GroundOverlays.OVERLAY_PIC + " = ?"
+                + " WHERE " + OverlayContract.GroundOverlays.ID_WAREHOUSE + " = ?";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -327,8 +328,8 @@ public class OverlayBean {
             return false;
 
         String sql = "UPDATE " + ProductContract.PRODUCT + " SET "
-                + Products.NAME + " = ?"
-                + " WHERE " + Products.ID + " = ?";
+                + ProductContract.Products.NAME + " = ?"
+                + " WHERE " + ProductContract.Products.ID + " = ?";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -347,7 +348,7 @@ public class OverlayBean {
             return false;
 
         String sql = "DELETE FROM " + OverlayContract.GR_OVERLAYS
-                + " WHERE " + GroundOverlays.ID_WAREHOUSE + " = ?";
+                + " WHERE " + OverlayContract.GroundOverlays.ID_WAREHOUSE + " = ?";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -363,32 +364,11 @@ public class OverlayBean {
         }
     }
 
-    public boolean deleteProductFromDbByProdId(int prodId) {
-        if (prodId <= 0)
-            return false;
-
-        String sql = "DELETE FROM " + ProductContract.PRODUCT
-                + " WHERE " + Products.ID + " = ?";
-
-        try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            // set the corresponding param
-            pstmt.setInt(1, prodId);
-            // execute the delete statement
-            pstmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
     public Overlay getOverlayEqualTo(int idWarehouse) {
         String sql = "SELECT * FROM " + OverlayContract.GR_OVERLAYS + " INNER JOIN " + WarehouseContract.WAREHOUSE
-                + " ON " + OverlayContract.GR_OVERLAYS + "." + GroundOverlays.ID_WAREHOUSE + " = "
-                + WarehouseContract.WAREHOUSE + "." + Warehouses.ID
-                + " WHERE " + OverlayContract.GR_OVERLAYS + "." + GroundOverlays.ID_WAREHOUSE + " = ?";;
+                + " ON " + OverlayContract.GR_OVERLAYS + "." + OverlayContract.GroundOverlays.ID_WAREHOUSE + " = "
+                + WarehouseContract.WAREHOUSE + "." + WarehouseContract.Warehouses.ID
+                + " WHERE " + OverlayContract.GR_OVERLAYS + "." + OverlayContract.GroundOverlays.ID_WAREHOUSE + " = ?";;
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt  = conn.prepareStatement(sql)) {

@@ -1,11 +1,13 @@
 package my.test.gui.jdbc.views;
 
+import my.test.gui.jdbc.Utils;
 import my.test.gui.jdbc.entities.Overlay;
 import my.test.gui.jdbc.contracts.ProductContract;
 import my.test.gui.jdbc.controller.OverlayBean;
 import my.test.gui.jdbc.contracts.OverlayContract.GroundOverlays;
 import my.test.gui.jdbc.contracts.WarehouseContract.Warehouses;
 import my.test.gui.jdbc.contracts.SlotContract;
+import my.test.gui.jdbc.resources.Strings;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -17,23 +19,27 @@ import java.util.*;
 import java.util.List;
 
 import static javax.swing.JOptionPane.showMessageDialog;
+import static my.test.gui.jdbc.Utils.okcancel;
 
 // TODO: cоздать вес необходимые таблица, если они не созданы
 public class OverlayUI extends JPanel {
+    private static final int ADD_FORM = 1;
+    private static final int EDIT_FORM = 2;
 
     // main form
-    private JButton createButton = new JButton("Добавить склад");
-    private JButton editButton = new JButton("Изменить склад");
-    private JButton deleteButton = new JButton("Удалить склад");
-    private JButton createSlot = new JButton("Добавить слот");
-    private JButton deleteSlot = new JButton("Удалить слот");
-
-    // controller for work with db
-    private OverlayBean bean = new OverlayBean();
+    private JButton addWarehouseButton = new JButton("Добавить склад");
+    private JButton editWarehouseButton = new JButton("Изменить склад");
+    private JButton deleteWarehouseButton = new JButton("Удалить склад");
+    private JButton addSlotButton = new JButton("Добавить слот");
+    private JButton deleteSlotButton = new JButton("Удалить слот");
+    private JButton addProdButton = new JButton("Продукты");
     private JTable overlayTable = new JTable();
     private JTable slotTable = new JTable();
     private JScrollPane overlayScrollPane;
     private JScrollPane slotScrollPane;
+
+    // controller for work with db
+    private OverlayBean bean = new OverlayBean();
 
     private boolean areWeOpeningEditOverlayForm = false;
     public boolean areWeOpeningEditOverlayForm() {
@@ -42,10 +48,11 @@ public class OverlayUI extends JPanel {
     public void setAreWeOpeningEditOverlayForm(boolean val) {
         areWeOpeningEditOverlayForm = val;
     }
+
     public OverlayUI() {
         setLayout(new GridLayout(2, 2, 15, 20));
 
-        // add table with overlays
+        // add tables
         overlayScrollPane = getOverlayScrollPaneWithTable();
         add(overlayScrollPane, 0);
 
@@ -55,83 +62,117 @@ public class OverlayUI extends JPanel {
         // add buttons
         add(initButtons(), 2);
 
+        // add click handler
         addRowClickListnerToOverlayTable();
     }
 
-    // form to add overlay
-    private void showCreateOverlayFrame()
+    private void showAddWarehouseFrame()
     {
-        JPanel panel = this;
-        EventQueue.invokeLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                OverlayAddFrame frame = new OverlayAddFrame(panel);
-            }
+        JPanel that = this;
+        EventQueue.invokeLater(() -> {
+            that.putClientProperty("formKind", ADD_FORM);
+            WarehouseFrame frame = new WarehouseFrame(that);
         });
     }
+
+    private void showEditWarehouseFrame() {
+        JPanel that = this;
+        EventQueue.invokeLater(() -> {
+            int selectedRow = overlayTable.getSelectedRow();
+            if (selectedRow < 0) {
+                showMessageDialog(null, "для начала, нужно выбрать строку");
+                return;
+            }
+
+            areWeOpeningEditOverlayForm = true;
+            //TODO: обработка ошибок
+            int idWarehouse = (int)overlayTable.getValueAt(selectedRow, 0);
+            Overlay overlay = bean.getOverlayEqualTo(idWarehouse);
+
+            that.putClientProperty("formKind", EDIT_FORM);
+            WarehouseFrame frame = new WarehouseFrame(that, overlay);
+        });
+    }
+
+    private void addProduct() {
+        JPanel that = this;
+
+        EventQueue.invokeLater(() -> {
+            that.putClientProperty("formKind", ADD_FORM);
+            ProductFrame frame = new ProductFrame(that);
+        });
+    }
+
 
     private JPanel initButtons() {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 3, 3));
 
-        panel.add(createButton);
-        createButton.addActionListener(new ActionListener() {
+        panel.add(addWarehouseButton);
+        addWarehouseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) { showAddWarehouseFrame(); }
+        });
+
+        panel.add(editWarehouseButton);
+        editWarehouseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) { showEditWarehouseFrame(); }
+        });
+
+        panel.add(deleteWarehouseButton);
+        deleteWarehouseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) { deleteSelectedRow(); }
+        });
+
+        panel.add(addProdButton);
+        addProdButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                showCreateOverlayFrame();
+                addProduct();
             }
         });
-        panel.add(editButton);
-        editButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) { editSelectedRow(); }
-        });
-        panel.add(deleteButton);
-        deleteButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent event) {
-                deleteSelectedRow();
-            }
-        });
+
+//        panel.add(deleteProd);
+//        deleteProd.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent event) {
+//                //addProduct();
+//            }
+//        });
+//
+//        panel.add(addSlot);
+//        addSlot.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent event) {
+//                //addProduct();
+//            }
+//        });
+//
+//        panel.add(deleteSlot);
+//        deleteSlot.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent event) {
+//                //addProduct();
+//            }
+//        });
+
         return panel;
     }
 
-    private void editSelectedRow() {
-        int selectedRow = overlayTable.getSelectedRow();
-        if (selectedRow < 0) {
-            showMessageDialog(null, "для начала, нужно выбрать строку");
-            return;
-        }
-
-        areWeOpeningEditOverlayForm = true;
-        //TODO: обработка ошибок
-        int idWarehouse = (int)overlayTable.getValueAt(selectedRow, 0);
-        Overlay overlay = bean.getOverlayEqualTo(idWarehouse);
-        OverlayAddFrame frame = new OverlayAddFrame(this, overlay);
-    }
-
-    private int okcancel(String theMessage) {
-        int result = JOptionPane.showConfirmDialog((Component) null, theMessage,
-                "alert", JOptionPane.OK_CANCEL_OPTION);
-        return result;
-    }
-
     private void deleteSelectedRow() {
+        //TODO: удалять нужно по-особому
         int selectedRow = overlayTable.getSelectedRow();
         if (selectedRow < 0) {
-            showMessageDialog(null, "для начала, нужно выбрать строку");
+            showMessageDialog(null, Strings.FormStrings.NEEDS_TO_CHOOSE_ROW);
             return;
         }
 
         if (okcancel("Вы уверены?") == 2)
             return;
 
-        int id_warehouse = (int)overlayTable.getValueAt(selectedRow, 0);
-        boolean isOverlayDeleted = bean.deleteOverlayFromDbByWarehouseId(id_warehouse);
-        if (isOverlayDeleted) {
-            repaintOverlayTable();
-        } else {
+        int idWarehouse = (int)overlayTable.getValueAt(selectedRow, 0);
+        boolean isOverlayDeleted = bean.deleteOverlayFromDbByWarehouseId(idWarehouse);
+        if (!isOverlayDeleted) {
             showMessageDialog(null, "ошибка при удалении записи");
+            return;
         }
+
+        repaintOverlayTable();
     }
 
     private JScrollPane getOverlayScrollPaneWithTable() {
@@ -213,34 +254,16 @@ public class OverlayUI extends JPanel {
         return new JTable(data, columnNames);
     }
 
-    private Object[][] fillDataTableByRowsList(List<Object[]> rows) {
-        Object[][] data = null;
-        int numRows = rows.size();
-        if (numRows <= 0)
-            return null;
-
-        data = new Object[numRows][];
-        for (int i = 0; i < numRows; ++i) {
-            Object[] row = rows.get(i);
-            int rowSize = row.length;
-            data[i] = new Object[rowSize];
-            for (int j = 0; j < rowSize; ++j) {
-                data[i][j] = row[j];
-            }
-        }
-        return data;
-    }
-
     private JTable getFilledOverlayTable() {
         // get column's names
         String[] columnNames = {
-                Warehouses.ID,
-                Warehouses.NAME,
-                GroundOverlays.LAT_LNG_BOUND_NEE,
-                GroundOverlays.LAT_LNG_BOUND_NEN,
-                GroundOverlays.LAT_LNG_BOUND_SWE,
-                GroundOverlays.LAT_LNG_BOUND_SWN,
-                GroundOverlays.OVERLAY_PIC
+            Warehouses.ID,
+            Warehouses.NAME,
+            GroundOverlays.LAT_LNG_BOUND_NEE,
+            GroundOverlays.LAT_LNG_BOUND_NEN,
+            GroundOverlays.LAT_LNG_BOUND_SWE,
+            GroundOverlays.LAT_LNG_BOUND_SWN,
+            GroundOverlays.OVERLAY_PIC
         };
 
         // get data
@@ -253,21 +276,7 @@ public class OverlayUI extends JPanel {
             rows.add(row);
         }
 
-        // lay down data to two dimension array to show in th table
-        int numRows = rows.size();
-        if (numRows <= 0) {
-            data = new Object[1][columnNames.length];
-        } else {
-            data = new Object[numRows][];
-            for (int i = 0; i < numRows; ++i) {
-                Object[] row = rows.get(i);
-                int rowSize = row.length;
-                data[i] = new Object[rowSize];
-                for (int j = 0; j < rowSize; ++j) {
-                    data[i][j] = row[j];
-                }
-            }
-        }
+        data = Utils.getFilledDataForTableFromRowsList(rows, columnNames);
         return new JTable(data, columnNames);
     }
 }

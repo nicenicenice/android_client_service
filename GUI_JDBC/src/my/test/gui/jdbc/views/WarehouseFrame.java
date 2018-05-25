@@ -2,6 +2,8 @@ package my.test.gui.jdbc.views;
 
 import my.test.gui.jdbc.entities.Overlay;
 import my.test.gui.jdbc.controller.OverlayBean;
+import my.test.gui.jdbc.entities.Product;
+import my.test.gui.jdbc.resources.Strings.FormStrings;
 import org.apache.commons.io.FilenameUtils;
 
 import java.awt.*;
@@ -10,15 +12,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.*;
 import java.nio.file.Files;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import static javax.swing.JOptionPane.showMessageDialog;
 
-public class OverlayAddFrame extends JFrame {
+public class WarehouseFrame extends JFrame {
     // controller for work with db
     private OverlayBean bean;
     private JLabel iconLabel;
+
+    private static final int ADD_FORM = 1;
+    private static final int EDIT_FORM = 2;
 
     // frame for add overlay form
     private JTextField idWarehouse = new JTextField(30);
@@ -27,9 +31,9 @@ public class OverlayAddFrame extends JFrame {
     private JTextField latLngBoundNEE = new JTextField(30);
     private JTextField latLngBoundSWN = new JTextField(30);
     private JTextField latLngBoundSWE = new JTextField(30);
-    private JButton chooseImage = new JButton("Выбрать изображение");
-    private JButton addOverlay = new JButton("Добавить");
-    private JButton editOverlay = new JButton("Изменить");
+    private JButton chooseImageButton = new JButton("Выбрать изображение");
+    private JButton addWarehouseButton = new JButton("Добавить");
+    private JButton editWarehouseButton = new JButton("Изменить");
 
     // since we find a record by its name, we should save it before any changes in the form
     private int idWarehouseOfOverlayToEdit;
@@ -38,23 +42,27 @@ public class OverlayAddFrame extends JFrame {
 
     private final int FRAME_WIDTH = 500;
     private final int FRAME_HEIGHT = 550;
+    private final int IMAGE_KB_LIMIT = 200;
     boolean isEditForm = false;
 
-    public OverlayAddFrame() {}
+    OverlayUI parentComponent;
+    JFrame that;
 
-    public OverlayAddFrame(JComponent component, Overlay overlay) {
+    public WarehouseFrame() {}
+
+    public WarehouseFrame(JComponent component, Overlay overlay) {
         this(component);
 
         toFillFormByOverlay(overlay);
     }
 
-    public OverlayAddFrame(JComponent component) {
+    public WarehouseFrame(JComponent component) {
         super("Let's add an overlay to our DB");
 
-        OverlayUI parentComponent = (OverlayUI)component;
+        parentComponent = (OverlayUI)component;
         boolean isEditForm = parentComponent.areWeOpeningEditOverlayForm();
 
-        JFrame that = this;
+        that = this;
         iconLabel = new JLabel();
 
         JPanel panel = new JPanel();
@@ -93,105 +101,17 @@ public class OverlayAddFrame extends JFrame {
         panel.add(iconLabel);
 
         // buttons
-        panel.add(chooseImage);
+        panel.add(chooseImageButton);
 
         // handle if we should add a new record or edit an old one
         if (isEditForm) {
-            panel.add(editOverlay);
+            panel.add(editWarehouseButton);
             parentComponent.setAreWeOpeningEditOverlayForm(false);
         } else {
-            panel.add(addOverlay);
+            panel.add(addWarehouseButton);
         }
 
-        chooseImage.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-
-                JFileChooser file = new JFileChooser();
-                file.setCurrentDirectory(new File(System.getProperty("user.home")));
-                //filter the files
-                FileNameExtensionFilter filter = new FileNameExtensionFilter(
-                        "*.Images", "jpg", "png");
-                file.addChoosableFileFilter(filter);
-                int result = file.showSaveDialog(null);
-
-                //if the user click on save in Jfilechooser
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    selectedImageFile = file.getSelectedFile();
-
-                    //Image image = ImageIO.read(selectedImageFile);
-                    if (!checkUploadedImage(selectedImageFile))
-                        return;
-
-                    // current uploaded image in a decodee string
-                    try {
-                        byte[] imageBytes = Files.readAllBytes(selectedImageFile.toPath());
-                        decodedBytes = new String(imageBytes, "ISO-8859-1");
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-
-                    String path = selectedImageFile.getAbsolutePath();
-                    iconLabel.setSize(200, 200);
-                    ImageIcon icon = ResizeImage(path);
-                    iconLabel.setIcon(icon);
-                } else if (result == JFileChooser.CANCEL_OPTION) {
-                    System.out.println("No File Select");
-                }
-            }
-        });
-
-        addOverlay.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                // check is a form complety filled
-                if (!checkIfFormCompletyFilled()) {
-                    showMessageDialog(null, "заполни форму, позорник");
-                    return;
-                }
-
-                if (!checkCoordsRestrictions()) {
-                    showMessageDialog(null, "неправильные значения в координатах. (должно быть от -180.000000 до 180.000000)");
-                    return;
-                }
-                // forming data to insert to DB
-                Overlay overlay = getAllDataFromForm();
-
-                // insert data to DB
-                boolean isSuccessInsertion = new OverlayBean().insertRowToDB(overlay);
-                if (isSuccessInsertion) {
-                    clearForm();
-                    OverlayUI panel = (OverlayUI)component;
-                    panel.repaintOverlayTable();
-                }
-            }
-        });
-
-        editOverlay.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                OverlayUI panel = (OverlayUI)component;
-
-                // check is a form complety filled
-                if (!checkIfFormCompletyFilled()) {
-                    showMessageDialog(null, "заполни форму, позорник");
-                    return;
-                }
-
-                if (!checkCoordsRestrictions()) {
-                    showMessageDialog(null, "неправильные значения в координатах. (должно быть от -180.000000 до 180.000000)");
-                    return;
-                }
-                // get all form's data to update db
-                Overlay overlay = getAllDataFromForm();
-
-                // update data in a row
-                boolean isSuccessUpdating = new OverlayBean().updateRowInDb(overlay);
-
-                if (isSuccessUpdating) {
-                    //OverlayUI panel = (OverlayUI)component;
-                    panel.repaintOverlayTable();
-                    that.dispatchEvent(new WindowEvent(that, WindowEvent.WINDOW_CLOSING));
-                }
-            }
-        });
+        initButtons();
 
         add(BorderLayout.WEST, panel);
         setLayout(new FlowLayout());
@@ -199,6 +119,108 @@ public class OverlayAddFrame extends JFrame {
         setSize(FRAME_WIDTH,FRAME_HEIGHT);
         setVisible(true);
         setResizable(false);
+    }
+
+    private void initButtons() {
+        addWarehouseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) { addWarehouse(); }
+        });
+
+        editWarehouseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) { editWarehouse(); }
+        });
+
+        chooseImageButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) { chooseImage(); }
+        });
+    }
+
+    private void addWarehouse()
+    {
+        EventQueue.invokeLater(() -> {
+            // check is a form complety filled
+            if (!checkIfFormCompletyFilled()) {
+                showMessageDialog(null, FormStrings.FILL_THE_FORM);
+                return;
+            }
+
+            if (!checkCoordsRestrictions()) {
+                showMessageDialog(null, "неправильные значения в координатах. (должно быть от -180.000000 до 180.000000)");
+                return;
+            }
+            // forming data to insert to DB
+            Overlay overlay = getAllDataFromForm();
+
+            // insert data to DB
+            boolean isSuccessInsertion = new OverlayBean().insertOverlayToDB(overlay);
+            if (isSuccessInsertion) {
+                clearForm();
+                parentComponent.repaintOverlayTable();
+            }
+        });
+    }
+
+    private void editWarehouse()
+    {
+        EventQueue.invokeLater(() -> {
+            // check is a form complety filled
+            if (!checkIfFormCompletyFilled()) {
+                showMessageDialog(null, FormStrings.FILL_THE_FORM);
+                return;
+            }
+
+            if (!checkCoordsRestrictions()) {
+                showMessageDialog(null, "неправильные значения в координатах. (должно быть от -180.000000 до 180.000000)");
+                return;
+            }
+            // get all form's data to update db
+            Overlay overlay = getAllDataFromForm();
+
+            // update data in a row
+            boolean isSuccessUpdating = new OverlayBean().updateOverlayIntoDb(overlay);
+
+            if (isSuccessUpdating) {
+                //OverlayUI panel = (OverlayUI)component;
+                parentComponent.repaintOverlayTable();
+                that.dispatchEvent(new WindowEvent(that, WindowEvent.WINDOW_CLOSING));
+            }
+        });
+    }
+
+    private void chooseImage()
+    {
+        EventQueue.invokeLater(() -> {
+            JFileChooser file = new JFileChooser();
+            file.setCurrentDirectory(new File(System.getProperty("user.home")));
+            //filter the files
+            FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                    "*.Images", "jpg", "png");
+            file.addChoosableFileFilter(filter);
+            int result = file.showSaveDialog(null);
+
+            //if the user click on save in Jfilechooser
+            if (result == JFileChooser.APPROVE_OPTION) {
+                selectedImageFile = file.getSelectedFile();
+
+                if (!checkUploadedImage(selectedImageFile))
+                    return;
+
+                // current uploaded image in a decodee string
+                try {
+                    byte[] imageBytes = Files.readAllBytes(selectedImageFile.toPath());
+                    decodedBytes = new String(imageBytes, "ISO-8859-1");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+                String path = selectedImageFile.getAbsolutePath();
+                iconLabel.setSize(200, 200);
+                ImageIcon icon = ResizeImage(path);
+                iconLabel.setIcon(icon);
+            } else if (result == JFileChooser.CANCEL_OPTION) {
+                System.out.println("No File Select");
+            }
+        });
     }
 
     private void toFillFormByOverlay(Overlay overlay) {
@@ -219,7 +241,7 @@ public class OverlayAddFrame extends JFrame {
         iconLabel.setSize(200, 200);
         ImageIcon imageIcon = new ImageIcon(pictureInBytes);
         Image newImg = imageIcon.getImage().getScaledInstance(
-                iconLabel.getWidth(), iconLabel.getHeight(), Image.SCALE_SMOOTH);
+        iconLabel.getWidth(), iconLabel.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon image = new ImageIcon(newImg);
         iconLabel.setIcon(image);
         selectedImageFile = null;
@@ -267,7 +289,7 @@ public class OverlayAddFrame extends JFrame {
                 !latLngBoundNEE.getText().isEmpty() &&
                 !latLngBoundSWN.getText().isEmpty() &&
                 !latLngBoundSWE.getText().isEmpty() &&
-                        iconLabel.getIcon() != null;
+                iconLabel.getIcon() != null;
 
     }
 
@@ -308,7 +330,7 @@ public class OverlayAddFrame extends JFrame {
         }
 
         double bytes = image.length();
-        if (bytes / 1024 > 200) {
+        if (bytes / 1024 > IMAGE_KB_LIMIT) {
             showMessageDialog(null, "размер картинки не должен превышать 200кб");
             return false;
         }

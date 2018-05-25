@@ -25,9 +25,12 @@ public class Slot {
 
     public Object[] getFields() {
         return new Object[] {
-                products,
-                name
+            products,
+            name
         };
     }
 
+    public String toString() {
+        return this.name;
+    }
 }
