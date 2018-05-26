@@ -7,8 +7,16 @@
 
 для того, чтобы загрузить изображение, положите картинку в папку пользователя или измените путь до него в пункции readfile():
 	
+	CREATE TABLE IF NOT EXISTS foo
+
 	DROP TABLE overlay;
-	CREATE TABLE overlay (
+	DROP TABLE product;
+	DROP TABLE warehouse;
+	DROP TABLE slot;
+	DROP TABLE warehouse_slot;
+	
+
+	CREATE TABLE IF NOT EXISTS overlay (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		id_warehouse INTEGER,
 		latLngBoundNEN REAL, 
@@ -23,7 +31,7 @@
 	INSERT INTO overlay (id_warehouse, latLngBoundNEN, latLngBoundNEE, latLngBoundSWN, latLngBoundSWE, overlayPic) VALUES(3, 54.148969, 36.649708, 54.210695, 36.750818, readfile('newark_nj_1922.jpg'));
 	
 
-	CREATE TABLE product (
+	CREATE TABLE IF NOT EXISTS product (
 		id_product INTEGER PRIMARY KEY AUTOINCREMENT, 
 		product_name TEXT
 	);
@@ -32,7 +40,7 @@
 	INSERT INTO product (product_name) VALUES('болты');
 	INSERT INTO product (product_name) VALUES('шурупы');
 
-	CREATE TABLE warehouse (
+	CREATE TABLE IF NOT EXISTS warehouse (
 		id_warehouse INTEGER PRIMARY KEY AUTOINCREMENT, 
 		warehouse_name TEXT
 	);
@@ -40,7 +48,7 @@
 	INSERT INTO warehouse (warehouse_name) VALUES(2);
 	INSERT INTO warehouse (warehouse_name) VALUES(3);
 	
-	CREATE TABLE slot (
+	CREATE TABLE IF NOT EXISTS slot (
 		id_slot INTEGER PRIMARY KEY AUTOINCREMENT, 
 		slot_name TEXT, 
 		id_product INTEGER, 
@@ -54,7 +62,7 @@
 	INSERT INTO slot (slot_name, id_product) VALUES('20.Я1', 4);
 	INSERT INTO slot (slot_name, id_product) VALUES('20.Я2', 4);
 
-	CREATE TABLE warehouse_slot (
+	CREATE TABLE IF NOT EXISTS warehouse_slot (
 		id INTEGER PRIMARY KEY AUTOINCREMENT, 
 		id_warehouse INTEGER, 
 		id_slot INTEGER, 
@@ -71,10 +79,14 @@
 
 
 	SELECT * FROM slot INNER JOIN product ON slot.id_product = product.id_product WHERE id_slot IN (1,2,3,4,5);
-2. Путь до БД с данными нужно прописать тут (42 строка):
+2. Путь до БД с данными нужно прописать тут (59 строка):
 https://github.com/nicenicenice/android_client_service/blob/master/OverlayService/src/my/android/service/OverlayService.java
 
 То есть, вместо "jdbc:sqlite:/Users/user/gr_overlays.db", "jdbc:sqlite:*YOUR_OWN_PATH_TO_DB*";
+
+Тоже самое для GUI приложения для работы с БД.
+https://github.com/nicenicenice/android_client_service/blob/master/GUI_JDBC/src/my/test/gui/jdbc/db/OverlayBean.java
+28 строка
 
 3. Запускаем Tomcat для проекта OverlayService. 
 Я это делаю из IntelliJ IDEA, просто щелкнув на кнопку запуск. 

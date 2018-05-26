@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.support.annotation.VisibleForTesting;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -69,12 +70,27 @@ public class DbProvider {
         });
     }
 
-    // в новом потоке очищаем и заполняем таблицу
-    public void refreshDbData(final JSONArray response) {
+    public void getSlotsInfoFromDb(final ResultCallback<Cursor> callback) {
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                mDbBackend.refreshTableWithJsonData(response);
+                final Cursor c =  mDbBackend.getSlotsInfoFromTable();
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onFinished(c);
+                    }
+                });
+            }
+        });
+    }
+
+    // в новом потоке очищаем и заполняем таблицу
+    public void refreshDbData(final JSONObject response) {
+        mExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                mDbBackend.refreshTablesWithJsonData(response);
             }
         });
     }

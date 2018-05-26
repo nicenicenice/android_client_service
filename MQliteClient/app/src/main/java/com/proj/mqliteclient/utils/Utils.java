@@ -2,6 +2,8 @@ package com.proj.mqliteclient.utils;
 
 import android.support.annotation.Nullable;
 import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -16,11 +18,11 @@ public class Utils {
 
     // парсим json из полученного ответа сервиса
     @Nullable
-    public static JSONArray getDataInJsonArrayFormat() throws Exception {
+    public static JSONObject getDataInJsonArrayFormat() throws Exception {
         String rawResponce = getRawDataFromService();
 
-        JSONArray jsonResponce;
-        jsonResponce = new JSONArray(rawResponce);
+        JSONObject jsonResponce;
+        jsonResponce = new JSONObject(rawResponce);
         return jsonResponce;
     }
 

@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by user on 28/04/2018.
@@ -26,6 +28,38 @@ public class DbUtils {
         return resultStringList;
     }
 
+    public static Map<String, String> getMapWithSlotsProdsAndClose(Cursor c) {
+        final Map<String, String> resultSlotsInfoMap = getSlotsInfoFromDB(c);
+        closeCursor(c);
+        return resultSlotsInfoMap;
+    }
+
+    private static Map<String, String> getSlotsInfoFromDB(Cursor c) {
+        Map<String, String> slotToProdMap = new HashMap<>();
+
+        if (c != null && (c.isFirst() || c.moveToFirst())) {
+            do {
+                String slotName = null;
+                String prodName = null;
+
+                int slotNameIdx = c.getColumnIndex(DbContract.Slots.NAME);
+                if (!c.isNull(slotNameIdx)) {
+                    slotName = c.getString(slotNameIdx);
+                }
+
+                int prodNameIdx = c.getColumnIndex(DbContract.Products.NAME);
+                if (!c.isNull(prodNameIdx)) {
+                    prodName = c.getString(prodNameIdx);
+                }
+                slotToProdMap.put(slotName, prodName);
+            }
+            while (c.moveToNext());
+        }
+
+        return slotToProdMap;
+
+    }
+
     // с помощью курсора вынимаем данные из таблицы в наш список
     // фактически, здесь происхоит выполнение запроса
     private static List<ContentValues> getAllDataFromDB(Cursor c) {
@@ -34,9 +68,9 @@ public class DbUtils {
             do {
                 ContentValues dBValues = new ContentValues();
 
-                int name = c.getColumnIndex(DbContract.GroundOverlays.NAME);
-                if (!c.isNull(name)) {
-                    dBValues.put(DbContract.GroundOverlays.NAME, c.getString(name));
+                int id = c.getColumnIndex(DbContract.GroundOverlays.WAREHOUSE_ID);
+                if (!c.isNull(id)) {
+                    dBValues.put(DbContract.GroundOverlays.WAREHOUSE_ID, c.getInt(id));
                 }
 
                 int latLngBoundNEN = c.getColumnIndex(DbContract.GroundOverlays.LAT_LNG_BOUND_NEN);
@@ -80,7 +114,7 @@ public class DbUtils {
             do {
                 String overlayName = null;
 
-                int nameIdx = c.getColumnIndex(DbContract.GroundOverlays.NAME);
+                int nameIdx = c.getColumnIndex(DbContract.Warehouses.NAME);
                 if (!c.isNull(nameIdx)) {
                     overlayName = c.getString(nameIdx);
                 }

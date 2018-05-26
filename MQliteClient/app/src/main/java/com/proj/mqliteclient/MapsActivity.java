@@ -102,11 +102,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Intent intent = getIntent();
-        String nameOfOverlay = intent.getStringExtra("name");
-        if (nameOfOverlay == null)
+        String nameOfWarehouse = intent.getStringExtra("name");
+        if (nameOfWarehouse == null)
             return;
 
         // получаем даннеы из БД и загружаем их в активити
-        loadDataFromDb(googleMap, nameOfOverlay);
+        loadDataFromDb(googleMap, nameOfWarehouse);
     }
 }

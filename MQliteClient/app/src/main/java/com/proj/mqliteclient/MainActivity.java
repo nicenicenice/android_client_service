@@ -17,13 +17,15 @@ import com.proj.mqliteclient.db.FakeContainer;
 import com.proj.mqliteclient.utils.Utils;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     // поле для создания нового потока
-    private AsyncTask<Void, Void, JSONArray> mDataLoadFromServiceTask;
+    private AsyncTask<Void, Void, JSONObject> mDataLoadFromServiceTask;
 
     private DbProvider mDbProvider;
     private DbProvider.ResultCallback<Cursor> mDataLoadDbCallback;
@@ -77,6 +79,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // обработка кнопки SHOW_SLOTS
+        Button showSlotsInfoButton = (Button) findViewById(R.id.show_slots_button);
+        assert showSlotsInfoButton != null;
+        showSlotsInfoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showSlotsInfoActivity();
+            }
+        });
+
         // обработка Spinner
         loadOverlayNamesFromDb();
     }
@@ -98,21 +110,27 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    // показываем активити с информацией по слотам
+    private void showSlotsInfoActivity() {
+        Intent intent = new Intent(this, SlotActivity.class);
+        startActivity(intent);
+    }
+
     // скачиваем данные с сервиса в другом потоке и обновляем таблицу, полученными данными
     private void loadDataFromService() {
 
-        mDataLoadFromServiceTask = new AsyncTask<Void, Void, JSONArray>() {
+        mDataLoadFromServiceTask = new AsyncTask<Void, Void, JSONObject>() {
             @Override
-            protected JSONArray doInBackground(Void... params) {
+            protected JSONObject doInBackground(Void... params) {
                 try {
-                    JSONArray jsonResult = Utils.getDataInJsonArrayFormat();
+                    JSONObject jsonResult = Utils.getDataInJsonArrayFormat();
                     return jsonResult;
                 } catch (Exception e) {
                     return null;
                 }
             }
             @Override
-            protected void onPostExecute(JSONArray result) {
+            protected void onPostExecute(JSONObject result) {
                 if (isCancelled()) return;
 
                 String messageToShow = "";
