@@ -1,5 +1,6 @@
 package my.test.gui.jdbc.views;
 
+import my.test.gui.jdbc.Utils;
 import my.test.gui.jdbc.entities.Overlay;
 import my.test.gui.jdbc.db.OverlayBean;
 import my.test.gui.jdbc.resources.Strings.FormStrings;
@@ -20,9 +21,6 @@ public class WarehouseFrame extends JFrame {
     private OverlayBean bean;
     private JLabel iconLabel;
 
-    private static final int ADD_FORM = 1;
-    private static final int EDIT_FORM = 2;
-
     // frame for add overlay form
     private JTextField idWarehouse = new JTextField(30);
     private JTextField nameWarehouse = new JTextField(30);
@@ -35,12 +33,11 @@ public class WarehouseFrame extends JFrame {
     private JButton editWarehouseButton = new JButton("Изменить");
 
     // since we find a record by its name, we should save it before any changes in the form
-    private int idWarehouseOfOverlayToEdit;
     private String decodedBytes;
     private File selectedImageFile = null;
 
     private final int FRAME_WIDTH = 500;
-    private final int FRAME_HEIGHT = 550;
+    private final int FRAME_HEIGHT = 600;
     private final int IMAGE_KB_LIMIT = 200;
     boolean isEditForm = false;
 
@@ -68,10 +65,14 @@ public class WarehouseFrame extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(true);
 
+        int widthIndent = 0;
+        int heightIndent = 7;
+
         if (isEditForm) {
             JLabel lIDOfWarehouse = new JLabel("Id склада");
             panel.add(lIDOfWarehouse);
             panel.add(idWarehouse);
+            panel.add(Box.createRigidArea(new Dimension(widthIndent,heightIndent)));
             idWarehouse.setEnabled(false);
             isEditForm = true;
         }
@@ -79,28 +80,35 @@ public class WarehouseFrame extends JFrame {
         JLabel lNameOfWarehouse = new JLabel("Название склада");
         panel.add(lNameOfWarehouse);
         panel.add(nameWarehouse);
+        panel.add(Box.createRigidArea(new Dimension(widthIndent,heightIndent)));
 
         JLabel lLatLngBoundNEN = new JLabel("Координата северо-восточного угла (с.ш.)");
         panel.add(lLatLngBoundNEN);
         panel.add(latLngBoundNEN);
+        panel.add(Box.createRigidArea(new Dimension(widthIndent,heightIndent)));
 
         JLabel lLatLngBoundNEE = new JLabel("Координата северо-восточного угла (в.д.)");
         panel.add(lLatLngBoundNEE);
         panel.add(latLngBoundNEE);
+        panel.add(Box.createRigidArea(new Dimension(widthIndent,heightIndent)));
 
         JLabel lLatLngBoundSWN = new JLabel("Координата юго-западного угла (с.ш.)");
         panel.add(lLatLngBoundSWN);
         panel.add(latLngBoundSWN);
+        panel.add(Box.createRigidArea(new Dimension(widthIndent,heightIndent)));
 
         JLabel lLatLngBoundSWE = new JLabel("Координата юго-западного угла (в.д.)");
         panel.add(lLatLngBoundSWE);
         panel.add(latLngBoundSWE);
+        panel.add(Box.createRigidArea(new Dimension(widthIndent,heightIndent)));
 
         // image
         panel.add(iconLabel);
+        panel.add(Box.createRigidArea(new Dimension(widthIndent,heightIndent + 2)));
 
         // buttons
         panel.add(chooseImageButton);
+        panel.add(Box.createRigidArea(new Dimension(widthIndent,heightIndent)));
 
         // handle if we should add a new record or edit an old one
         if (isEditForm) {
@@ -109,13 +117,18 @@ public class WarehouseFrame extends JFrame {
         } else {
             panel.add(addWarehouseButton);
         }
+        panel.add(Box.createRigidArea(new Dimension(widthIndent,heightIndent)));
 
         initButtons();
 
         add(BorderLayout.WEST, panel);
-        setLayout(new FlowLayout());
+        setLayout(new FlowLayout(FlowLayout.LEADING));
+
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(FRAME_WIDTH,FRAME_HEIGHT);
+
+        // размещаем окно по центру экрана
+        Utils.setFrameLocationToCenterOfScreen(this);
         setVisible(true);
         setResizable(false);
     }
@@ -224,8 +237,6 @@ public class WarehouseFrame extends JFrame {
 
     private void toFillFormByOverlay(Overlay overlay) {
         idWarehouse.setText(String.valueOf(overlay.getIdWarehouse()));
-        //TODO:обработка ошибок
-        idWarehouseOfOverlayToEdit = Integer.valueOf(idWarehouse.getText().trim());
 
         nameWarehouse.setText(overlay.getWarehouseName());
         latLngBoundNEN.setText(overlay.getLatLngBoundNEN());

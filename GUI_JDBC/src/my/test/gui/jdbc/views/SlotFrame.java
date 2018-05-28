@@ -26,8 +26,8 @@ public class SlotFrame extends JFrame {
     private JButton editSlotButton = new JButton("Изменить выбранный слот");
     private JButton deleteSlotButton = new JButton("Удалить выбранный слот");
 
-    private final int FRAME_WIDTH = 500;
-    private final int FRAME_HEIGHT = 540;
+    private int FRAME_WIDTH = 500;
+    private int FRAME_HEIGHT = 560;
 
     public boolean isFormEdit() {
         return isFormEdit;
@@ -54,9 +54,10 @@ public class SlotFrame extends JFrame {
 
         initButtons();
 
-        setLayout(new FlowLayout());
+        setLayout(new FlowLayout(FlowLayout.CENTER, 0, 15));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(FRAME_WIDTH,FRAME_HEIGHT);
+        Utils.setFrameLocationToCenterOfScreen(this);
         setVisible(true);
         setResizable(false);
     }

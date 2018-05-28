@@ -25,7 +25,7 @@ public class ProductFrame extends JFrame {
     private JButton deleteProductButton = new JButton("Удалить выбранный продукт");
 
     private final int FRAME_WIDTH = 500;
-    private final int FRAME_HEIGHT = 540;
+    private final int FRAME_HEIGHT = 560;
 
     public boolean isFormEdit() {
         return isFormEdit;
@@ -53,9 +53,11 @@ public class ProductFrame extends JFrame {
 
         initButtons();
 
-        setLayout(new FlowLayout());
+        setLayout(new FlowLayout(FlowLayout.CENTER, 0, 15));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(FRAME_WIDTH,FRAME_HEIGHT);
+
+        Utils.setFrameLocationToCenterOfScreen(this);
         setVisible(true);
         setResizable(false);
     }

@@ -1,11 +1,15 @@
 package my.test.gui.jdbc;
 
+import my.test.gui.jdbc.resources.Strings;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+
+import static javax.swing.JOptionPane.showMessageDialog;
 
 public class Utils {
 
@@ -27,6 +31,12 @@ public class Utils {
             }
         }
         return data;
+    }
+
+    public static void setFrameLocationToCenterOfScreen(JFrame frame) {
+        frame.setLocationRelativeTo(null);
+//        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+//        frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
     }
 
     public static String getDecodedStringFromBlob(InputStream input) throws IOException {

@@ -1,5 +1,6 @@
 package my.test.gui.jdbc.views;
 
+import my.test.gui.jdbc.Utils;
 import my.test.gui.jdbc.db.OverlayBean;
 import my.test.gui.jdbc.entities.Product;
 
@@ -23,8 +24,8 @@ public class AddEditProductFrame extends JFrame {
     private JButton addProductButton = new JButton("Добавить");
     private JButton editProductButton = new JButton("Изменить");
 
-    private final int FRAME_WIDTH = 450;
-    private final int FRAME_HEIGHT = 170;
+    private int FRAME_WIDTH = 425;
+    private int FRAME_HEIGHT = 140;
     boolean isFormEdit = false;
 
     JFrame that;
@@ -42,34 +43,34 @@ public class AddEditProductFrame extends JFrame {
         parentFrame = (ProductFrame)frame;
         isFormEdit = parentFrame.isFormEdit();
 
-        JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setOpaque(true);
-
         if (parentFrame.isFormEdit()) {
+            FRAME_HEIGHT = 188;
+            this.setTitle("Изменение продукта");
+
             JLabel lIdOfProduct = new JLabel("Id склада");
-            mainPanel.add(lIdOfProduct);
-            mainPanel.add(productId);
+            add(lIdOfProduct);
+            add(productId);
             productId.setEnabled(false);
         }
 
         JLabel lNameOfProduct = new JLabel("Название продукта");
-        mainPanel.add(lNameOfProduct);
-        mainPanel.add(productName);
+        add(lNameOfProduct);
+        add(productName);
 
         // handle if we should add a new record or edit an old one
         if (parentFrame.isFormEdit()) {
-            mainPanel.add(editProductButton);
+            add(editProductButton);
         } else {
-            mainPanel.add(addProductButton);
+            add(addProductButton);
         }
 
         initButtons();
 
-        add(BorderLayout.WEST, mainPanel);
-        setLayout(new FlowLayout());
+        setLayout(new FlowLayout(FlowLayout.CENTER, 0, 8));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(FRAME_WIDTH,FRAME_HEIGHT);
+
+        Utils.setFrameLocationToCenterOfScreen(this);
         setVisible(true);
         setResizable(false);
     }

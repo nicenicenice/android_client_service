@@ -1,5 +1,6 @@
 package my.test.gui.jdbc.views;
 
+import my.test.gui.jdbc.Utils;
 import my.test.gui.jdbc.db.OverlayBean;
 import my.test.gui.jdbc.entities.Product;
 import my.test.gui.jdbc.entities.Slot;
@@ -31,8 +32,8 @@ public class AddEditSlotFrame extends JFrame {
     JComboBox<Product> productComboBox = new JComboBox<Product>();
     JComboBox<Warehouse> warehouseComboBox = new JComboBox<Warehouse>();
 
-    private final int FRAME_WIDTH = 450;
-    private final int FRAME_HEIGHT = 240;
+    private int FRAME_WIDTH = 450;
+    private int FRAME_HEIGHT = 220;
     boolean isFormEdit = false;
 
     JFrame that;
@@ -44,36 +45,33 @@ public class AddEditSlotFrame extends JFrame {
     }
 
     AddEditSlotFrame(JFrame frame) {
-        super("Добавление продукта");
+        super("Добавление слота");
 
         that = this;
         parentFrame = (SlotFrame)frame;
         isFormEdit = parentFrame.isFormEdit();
 
+        int widthIndent = 0;
+        int heightIndent = 7;
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setOpaque(true);
 
         if (parentFrame.isFormEdit()) {
+            FRAME_HEIGHT = 270;
+            this.setTitle("Изменение слота");
+
             JLabel lIdOfSlot = new JLabel("Id слота");
             mainPanel.add(lIdOfSlot);
             mainPanel.add(slotId);
+            mainPanel.add(Box.createRigidArea(new Dimension(widthIndent, heightIndent)));
             slotId.setEnabled(false);
-
-//            JLabel lIdOfProduct = new JLabel("Id продукта");
-//            mainPanel.add(lIdOfProduct);
-//            mainPanel.add(productId);
-//            productId.setEnabled(false);
-//
-//            JLabel lIdOfWarehouse = new JLabel("Id склада");
-//            mainPanel.add(lIdOfWarehouse);
-//            mainPanel.add(warehouseId);
-//            warehouseId.setEnabled(false);
         }
 
         JLabel lNameOfSlot = new JLabel("Название слота");
         mainPanel.add(lNameOfSlot);
         mainPanel.add(slotName);
+        mainPanel.add(Box.createRigidArea(new Dimension(widthIndent, heightIndent)));
 
         productComboBox = getFilledProductJComboBox();
         if (productComboBox == null || productComboBox.getItemCount() <= 0) {
@@ -83,11 +81,13 @@ public class AddEditSlotFrame extends JFrame {
         JLabel lproducts = new JLabel("Продукты");
         mainPanel.add(lproducts);
         mainPanel.add(productComboBox);
+        mainPanel.add(Box.createRigidArea(new Dimension(widthIndent, heightIndent)));
 
         warehouseComboBox = getFilledWarehouseJComboBox();
         JLabel lWarehouses = new JLabel("Склады");
         mainPanel.add(lWarehouses);
         mainPanel.add(warehouseComboBox);
+        mainPanel.add(Box.createRigidArea(new Dimension(widthIndent, heightIndent)));
 
         // handle if we should add a new record or edit an old one
         if (parentFrame.isFormEdit()) {
@@ -95,6 +95,7 @@ public class AddEditSlotFrame extends JFrame {
         } else {
             mainPanel.add(addSlotButton);
         }
+        mainPanel.add(Box.createRigidArea(new Dimension(widthIndent, heightIndent)));
 
         initButtons();
 
@@ -102,6 +103,8 @@ public class AddEditSlotFrame extends JFrame {
         setLayout(new FlowLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(FRAME_WIDTH,FRAME_HEIGHT);
+
+        Utils.setFrameLocationToCenterOfScreen(this);
         setVisible(true);
         setResizable(false);
     }

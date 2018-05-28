@@ -48,7 +48,7 @@ public class OverlayUI extends JPanel {
     }
 
     public OverlayUI() {
-        setLayout(new GridLayout(2, 2, 15, 20));
+        setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
 
         // add tables
         overlayScrollPane = getOverlayScrollPaneWithTable();
@@ -62,6 +62,8 @@ public class OverlayUI extends JPanel {
 
         // add click handler
         addRowClickListnerToOverlayTable();
+
+        setSizeSlotScrollPane();
     }
 
     private void showAddWarehouseFrame()
@@ -141,13 +143,6 @@ public class OverlayUI extends JPanel {
                 addSlot();
             }
         });
-//
-//        panel.add(deleteSlot);
-//        deleteSlot.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent event) {
-//                //addProduct();
-//            }
-//        });
 
         return panel;
     }
@@ -184,7 +179,12 @@ public class OverlayUI extends JPanel {
         slotTable = getFilledSlotTable(warehouseId);
         slotTable.setFillsViewportHeight(true);
         slotScrollPane = new JScrollPane(slotTable);
+        setSizeSlotScrollPane();
         return slotScrollPane;
+    }
+
+    private void setSizeSlotScrollPane() {
+        slotScrollPane.setPreferredSize(new Dimension(300, 420));
     }
 
     public void repaintOverlayTable() {
