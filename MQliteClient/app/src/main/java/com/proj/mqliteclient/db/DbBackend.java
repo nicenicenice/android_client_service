@@ -287,13 +287,32 @@ class DbBackend implements DbContract {
         return c;
     }
 
-    public Cursor getSlotsInfoFromTable() {
+    public Cursor getAllSlotsFromTable() {
         SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
 
         String sql = "SELECT * FROM " + SLOTS + " INNER JOIN " + PRODUCTS
                 + " ON " + SLOTS + "." + Slots.PROD_ID + " = " + PRODUCTS + "." + Products.ID;
 
         Cursor c = db.rawQuery(sql, null);
+        if (c != null) {
+            c.moveToFirst();
+        }
+        return c;
+    }
+
+    public Cursor getSlotsInfoByWarehouseNameFromTable(String nameOfWarehouse) {
+        SQLiteDatabase db = mDbOpenHelper.getWritableDatabase();
+
+        String sql = "SELECT * FROM " + WAREHOUSE
+                + " INNER JOIN " + WAREHOUSE_SLOT
+                + " ON " + WAREHOUSE + "." + Warehouses.ID + " = " + WAREHOUSE_SLOT + "." + WarehouseSlots.ID_WAREHOUSE +
+                " INNER JOIN " + SLOTS
+                + " ON " + WAREHOUSE_SLOT + "." + WarehouseSlots.ID_SLOT  + " = " + SLOTS + "." + Slots.ID +
+                " INNER JOIN " + PRODUCTS
+                + " ON " + SLOTS + "." + Slots.PROD_ID  + " = " + PRODUCTS + "." + Products.ID +
+                " WHERE " + WAREHOUSE + "." + Warehouses.NAME + " = ?";
+
+        Cursor c = db.rawQuery(sql, new String[] {nameOfWarehouse});
         if (c != null) {
             c.moveToFirst();
         }

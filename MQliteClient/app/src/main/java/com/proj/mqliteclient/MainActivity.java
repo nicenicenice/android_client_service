@@ -95,16 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
     // показывает новую активити
     private void showDataActivity() {
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        assert spinner != null;
-
-        String selectedItem = spinner.getSelectedItem().toString();
-        if (selectedItem == null) {
-            Toast.makeText(getBaseContext(),
-                    getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_LONG).show();
-            return;
-        }
-
+        String selectedItem = getSelectedSpinnerItem();
         Intent intent = new Intent(this, MapsActivity.class);
         intent.putExtra("name", selectedItem);
         startActivity(intent);
@@ -112,8 +103,23 @@ public class MainActivity extends AppCompatActivity {
 
     // показываем активити с информацией по слотам
     private void showSlotsInfoActivity() {
+        String selectedItem = getSelectedSpinnerItem();
         Intent intent = new Intent(this, SlotActivity.class);
+        intent.putExtra("name", selectedItem);
         startActivity(intent);
+    }
+
+    private String getSelectedSpinnerItem() {
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        assert spinner != null;
+
+        String selectedItem = spinner.getSelectedItem().toString();
+        if (selectedItem == null) {
+            Toast.makeText(getBaseContext(),
+                    getResources().getString(R.string.unexpected_error_occurred), Toast.LENGTH_LONG).show();
+            return null;
+        }
+        return selectedItem;
     }
 
     // скачиваем данные с сервиса в другом потоке и обновляем таблицу, полученными данными

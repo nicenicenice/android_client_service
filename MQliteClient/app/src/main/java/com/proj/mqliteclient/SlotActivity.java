@@ -33,10 +33,13 @@ public class SlotActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_slot);
 
-        loadSlotsInfoFromDb();
+        Intent intent = getIntent();
+        String nameOfWarehouse = intent.getStringExtra("name");
+
+        loadSlotsInfoFromDb(nameOfWarehouse);
     }
 
-    private void loadSlotsInfoFromDb() {
+    private void loadSlotsInfoFromDb(String nameOfWarehouse) {
 
         mDataLoadDbCallback = new DbProvider.ResultCallback<Cursor>() {
             @Override
@@ -47,7 +50,7 @@ public class SlotActivity extends AppCompatActivity {
                 onDataLoadedFromDb(c);
             }
         };
-        mDbProvider.getSlotsInfoFromDb(mDataLoadDbCallback);
+        mDbProvider.getSlotsInfoByWarehouseNameFromDb(mDataLoadDbCallback, this, nameOfWarehouse);
     }
 
     private void onDataLoadedFromDb(Cursor c) {

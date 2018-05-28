@@ -1,11 +1,14 @@
 package com.proj.mqliteclient.db;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.VisibleForTesting;
+
+import com.proj.mqliteclient.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -70,11 +73,18 @@ public class DbProvider {
         });
     }
 
-    public void getSlotsInfoFromDb(final ResultCallback<Cursor> callback) {
+    public void getSlotsInfoByWarehouseNameFromDb(final ResultCallback<Cursor> callback, final Activity context, final String nameOfWarehouse) {
         mExecutor.execute(new Runnable() {
             @Override
             public void run() {
-                final Cursor c =  mDbBackend.getSlotsInfoFromTable();
+                final Cursor c;
+
+                String defaulWarehouseMessage = context.getResources().getString(R.string.unexpected_error_occurred);
+                if (nameOfWarehouse == null || nameOfWarehouse.isEmpty() || nameOfWarehouse.equals(defaulWarehouseMessage)) {
+                    c = mDbBackend.getAllSlotsFromTable();
+                } else {
+                    c =  mDbBackend.getSlotsInfoByWarehouseNameFromTable(nameOfWarehouse);
+                }
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
